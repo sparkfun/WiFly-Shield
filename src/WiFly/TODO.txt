@@ -15,3 +15,10 @@ entered and these bytes will be passed on to other side. " Add this delay to see
 * Consider future support for firmware 2.20 which has better debug level control--including supressing DHCP messages?
 
 * Improve documentation.
+
+* Special case version 2.19 firmware with passphrase length bug?
+
+* Make compatible with use of pins_arduino.h as referenced <http://forum.sparkfun.com/viewtopic.php?p=113037#p113037> and <http://code.google.com/p/arduino/source/detail?spec=svn1027&r=1027>. (Including use of SS rather than CS.)
+
+
+
