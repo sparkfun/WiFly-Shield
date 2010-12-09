@@ -1,4 +1,12 @@
-For the moment, you can find a link to the latest source code of the
-Arduino WiFly library here:
+This is a library for the Arduino-compatible WiFly Shield available from
+SparkFun Electronics:
 
-  <http://forum.sparkfun.com/viewtopic.php?f=13&t=23498>
+  <http://www.sparkfun.com/commerce/product_info.php?products_id=9367> 
+
+The library also provides a high-level interface for the "SC16IS750
+I2C/SPI-to-UART IC" used in the WiFly shield but also available on a
+separate breakout board:
+
+   <http://www.sparkfun.com/commerce/product_info.php?products_id=9745> .
+
+See the file 'src/WiFly/README.txt' for more detail.
