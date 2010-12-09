@@ -22,3 +22,4 @@ entered and these bytes will be passed on to other side. " Add this delay to see
 
 * Reimplement release script. Including handling credentials issue.
 
+* Support WEP out of the box.
