@@ -1,39 +1,40 @@
 /*
- * based on:
- *
- * WiFly Autoconnect Example
- * Copyright (c) 2010 SparkFun Electronics.  All right reserved.
- * Written by Chris Taylor
- *
- * This code was written to demonstrate the WiFly Shield from SparkFun Electronics
- * 
- * This code will initialize and test the SC16IS750 UART-SPI bridge, and automatically
- * connect to a WiFi network using the parameters given in the global variables.
- *
- * http://www.sparkfun.com
+
+  SpiUartTerminal - tool to help troubleshoot problems with WiFly shield
+
+  This code will initialize and test the SC16IS750 UART-SPI bridge then enable you
+  to send commands to the WiFly module.
+
+  Copyright (c) 2010 SparkFun Electronics. http://sparkfun.com LGPL 3.0
+
  */
 
-#include "WiFly.h"
-
-
-#include "Credentials.h"
+#include "WiFly.h" // We use this for the preinstantiated SpiSerial object.
 
 
 void setup() {
 
   Serial.begin(9600);
-  Serial.println("\n\r\n\rWiFly Shield Terminal Routine");
+  Serial.println("SPI UART on WiFly Shield terminal tool");
+  Serial.println("--------------------------------------");  
+  Serial.println();
+  Serial.println("This is a tool to help you troubleshoot problems with the WiFly shield.");
+  Serial.println("For consistent results unplug & replug power to your Arduino and WiFly shield.");
+  Serial.println("(Ensure the serial monitor is not open when you remove power.)");  
+  Serial.println();
   
-  WiFly.begin();
+  Serial.println("Attempting to connect to SPI UART...");
+  SpiSerial.begin();
+  Serial.println("Connected to SPI UART.");
+  Serial.println();
   
-  if (!WiFly.join(ssid, passphrase)) {
-    Serial.println("Association failed.");
-    while (1) {
-      // Hang on failure.
-    }
-  }
+  Serial.println(" * Use $$$ (with no line ending) to enter WiFly command mode. (\"CMD\")");
+  Serial.println(" * Then send each command followed by a carriage return.");
+  Serial.println();
   
-  Serial.println("Associated!");
+  Serial.println("Waiting for input.");
+  Serial.println();    
+  
 }
 
 
