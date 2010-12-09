@@ -1,0 +1,17 @@
+
+* Add mention of port 80 default issue.
+
+* "enter command mode    Characters are PASSED until this exact 
+sequence is seen.  If any bytes are seen before these chars, or after 
+these chars, in a 250ms window,  command mode will not be 
+entered and these bytes will be passed on to other side. " Add this delay to see if it improves things. (Inspired by World Mood Light.)
+
+* Add mention of configuration change/save for flow control
+
+* Add Mega support from http://forum.sparkfun.com/viewtopic.php?f=13&t=22067
+
+* Add baud rate control.
+
+* Consider future support for firmware 2.20 which has better debug level control--including supressing DHCP messages?
+
+* Improve documentation.
