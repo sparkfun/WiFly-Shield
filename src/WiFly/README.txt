@@ -60,6 +60,9 @@ This release of the library comes with three examples:
 For each example you will need to modify the file "Credentials.h" to
 supply your network's name (SSID) and passphrase.
 
+There is also a troubleshooting tool:
+
+  * SpiUartTerminal: enter command mode and send commands manually
 
 = Known Issues =
 
@@ -124,6 +127,10 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
 
 
 = Changelog =
+
++ alpha 2 -- XX Xxxxxx 201x -- "Azalea Galaxy"
+
+  * Added 'SpiUartTerminal' troubleshooting tool.
 
 + alpha 1 -- 31 August 2010 -- "August Gratitude"
 
