@@ -1,6 +1,10 @@
 
 #include "WiFly.h"
 
+#define DEBUG_LEVEL 0
+
+#include "Debug.h"
+
 boolean WiFlyDevice::responseMatched(const char *toMatch) {
  /*
   */ 
@@ -72,6 +76,9 @@ WiFlyDevice::WiFlyDevice(SpiUartDevice& theUart) : uart (theUart) {
 void WiFlyDevice::begin() {
   /*
    */
+
+  DEBUG_LOG(1, "Entered WiFlyDevice::begin()");
+
   uart.begin();
   reboot(); // Reboot to get device into known state
   requireFlowControl();
@@ -97,6 +104,9 @@ void WiFlyDevice::switchToCommandMode() {
 void WiFlyDevice::reboot() {
   /*
    */
+  
+  DEBUG_LOG(1, "Entered reboot");
+
   switchToCommandMode();
 
    uart.println("reboot");
