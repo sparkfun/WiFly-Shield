@@ -10,6 +10,8 @@ boolean WiFlyDevice::responseMatched(const char *toMatch) {
   */ 
   boolean matchFound = true;
   
+  DEBUG_LOG(3, "Entered responseMatched");
+
   for (unsigned int offset = 0; offset < strlen(toMatch); offset++) {
     while (!uart.available()) {
       // Wait -- no timeout
@@ -26,6 +28,9 @@ boolean WiFlyDevice::responseMatched(const char *toMatch) {
 void WiFlyDevice::attemptSwitchToCommandMode() {
   /*
    */
+
+  DEBUG_LOG(2, "Entered attemptSwitchToCommandMode");
+
   // Exit command mode if we haven't already
   uart.println("");  
   uart.println("exit");
@@ -39,6 +44,9 @@ void WiFlyDevice::attemptSwitchToCommandMode() {
 void WiFlyDevice::skipRemainderOfResponse() {
   /*
    */
+  
+  DEBUG_LOG(3, "Entered skipRemainderOfResponse");
+
     while (!(uart.available() && (uart.read() == '\n'))) {
       // Skip remainder of response
     }
@@ -91,6 +99,8 @@ void WiFlyDevice::begin() {
 void WiFlyDevice::switchToCommandMode() {
   /*
    */
+
+  DEBUG_LOG(1, "Entered switchToCommandMode");
 
   attemptSwitchToCommandMode();
       
