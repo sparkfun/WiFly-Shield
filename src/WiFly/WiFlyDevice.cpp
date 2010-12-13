@@ -96,6 +96,8 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot = false) {
     
    */
 
+  DEBUG_LOG(1, "Entered enterCommandMode");
+
   // Note: We used to first try to exit command mode in case we were
   //       already in it. Doing this actually seems to be less
   //       reliable so instead we now just ignore the errors from
@@ -250,6 +252,8 @@ boolean WiFlyDevice::softwareReboot(boolean isAfterBoot = true) {
 
    */
 
+  DEBUG_LOG(1, "Entered softwareReboot");
+
   for (int retryCount = 0;
        retryCount < SOFTWARE_REBOOT_RETRY_ATTEMPTS;
        retryCount++) {  
@@ -329,6 +333,8 @@ void WiFlyDevice::requireFlowControl() {
 	  reboot.
 
    */
+
+  DEBUG_LOG(1, "Entered requireFlowControl");
 
   switchToCommandMode();
 
