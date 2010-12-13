@@ -49,6 +49,8 @@ class WiFlyDevice {
     void skipRemainderOfResponse();
     boolean responseMatched(const char *toMatch);
 
+    boolean findInResponse(const char *toMatch, unsigned int timeOut);
+
     friend class Client;
     friend class Server;
 };
