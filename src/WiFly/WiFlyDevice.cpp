@@ -261,6 +261,11 @@ boolean WiFlyDevice::softwareReboot(boolean isAfterBoot = true) {
     }
   
     uart.println("reboot");
+
+    // For some reason the full "*Reboot*" message doesn't always
+    // seem to be received so we look for the later "*READY*" message instead.
+
+    // TODO: Extract information from boot? e.g. version and MAC address
   
     if (findInResponse("*READY*", 2000)) {
       return true;
