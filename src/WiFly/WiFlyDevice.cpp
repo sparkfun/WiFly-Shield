@@ -5,6 +5,63 @@
 
 #include "Debug.h"
 
+boolean WiFlyDevice::findInResponse(const char *toMatch,
+				    unsigned int timeOut = 0) {
+  /*
+     
+   */
+
+  int byteRead;
+  
+  unsigned int timeOutTarget; // in milliseconds
+  
+  
+  DEBUG_LOG(1, "Entered responseMatched");
+  DEBUG_LOG(2, "Want to match:");
+  DEBUG_LOG(2, toMatch);
+  DEBUG_LOG(3, "Found:");
+
+  for (unsigned int offset = 0; offset < strlen(toMatch); offset++) {
+    
+    // Reset after successful character read
+    timeOutTarget = millis() + timeOut; // Doesn't handle timer wrapping
+
+    while (!uart.available()) {
+      // Wait, with optional time out.
+      if (timeOut > 0) {
+        if (millis() > timeOutTarget) {
+          return false;
+        }
+      }
+      delay(1); // This seems to improve reliability slightly
+    }
+
+    // We read this separately from the conditional statement so we can
+    // log the character read when debugging.
+    byteRead = uart.read();
+
+    delay(1); // Removing logging may affect timing slightly
+
+    DEBUG_LOG(5, "Offset:");
+    DEBUG_LOG(5, offset);
+    DEBUG_LOG(3, (char) byteRead);
+    DEBUG_LOG(4, byteRead);
+
+    if (byteRead != toMatch[offset]) {
+      offset = 0;
+      // Ignore character read if it's not a match for the start of the string
+      if (byteRead != toMatch[offset]) {
+        offset = -1;
+      }
+      continue;
+    }
+  }
+  
+  return true;
+}
+
+
+
 boolean WiFlyDevice::responseMatched(const char *toMatch) {
  /*
   */ 
