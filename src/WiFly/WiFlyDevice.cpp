@@ -287,15 +287,10 @@ void WiFlyDevice::reboot() {
   
   DEBUG_LOG(1, "Entered reboot");
 
-  switchToCommandMode();
-
-   uart.println("reboot");
-   
-   waitForResponse("*Reboot*");
-
-   // TODO: Extract information from boot? e.g. version and MAC address
-
-   waitForResponse("*READY*");
+  if (!softwareReboot()) {
+    DEBUG_LOG(1, "Failed to reboot. Halting.");
+    while (1) {}; // Hang. TODO: Handle differently?
+  }
 }
 
 
