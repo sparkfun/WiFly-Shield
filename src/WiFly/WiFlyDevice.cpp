@@ -12,6 +12,9 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
      
    */
 
+  // TODO: Change 'sendCommand' to use 'findInResponse' and have timeouts,
+  //       and then use 'sendCommand' in routines that call 'findInResponse'?
+
   int byteRead;
   
   unsigned int timeOutTarget; // in milliseconds
