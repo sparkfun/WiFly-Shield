@@ -91,7 +91,7 @@ boolean WiFlyDevice::responseMatched(const char *toMatch) {
 
 #define COMMAND_MODE_GUARD_TIME 250 // in milliseconds
 
-boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot = false) {
+boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
   /*
     
    */
