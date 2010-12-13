@@ -83,6 +83,76 @@ boolean WiFlyDevice::responseMatched(const char *toMatch) {
 }
 
 
+
+#define COMMAND_MODE_ENTER_RETRY_ATTEMPTS 5
+
+#define COMMAND_MODE_GUARD_TIME 250 // in milliseconds
+
+boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot = false) {
+  /*
+    
+   */
+
+  // Note: We used to first try to exit command mode in case we were
+  //       already in it. Doing this actually seems to be less
+  //       reliable so instead we now just ignore the errors from
+  //       sending the "$$$" in command mode.
+
+  for (int retryCount = 0;
+       retryCount < COMMAND_MODE_ENTER_RETRY_ATTEMPTS;
+       retryCount++) {
+
+    // At first I tried automatically performing the
+    // wait-send-wait-send-send process twice before checking if it
+    // succeeded. But I removed the automatic retransmission even
+    // though it makes things  marginally less reliable because it speeds
+    // up the (hopefully) more common case of it working after one
+    // transmission. We also now have automatic-retries for the whole
+    // process now so it's less important anyway.
+
+    if (isAfterBoot) {
+      delay(1000); // This delay is so characters aren't missed after a reboot.
+    }
+  
+    delay(COMMAND_MODE_GUARD_TIME);
+    
+    SpiSerial.print("$$$");
+    
+    delay(COMMAND_MODE_GUARD_TIME);
+
+    // We could already be in command mode or not.
+    // We could also have a half entered command.
+    // If we have a half entered command the "$$$" we've just added
+    // could succeed or it could trigger an error--there's a small
+    // chance it could also screw something up (by being a valid
+    // argument) but hopefully it's not a general issue.  Sending
+    // these two newlines is intended to clear any partial commands if
+    // we're in command mode and in either case trigger the display of
+    // the version prompt (not that we actually check for it at the moment
+    // (anymore)).
+
+    // TODO: Determine if we need less boilerplate here.  
+    
+    SpiSerial.println();
+    SpiSerial.println();  
+  
+    // TODO: Add flush with timeout here?
+    
+    // This is used to determine whether command mode has been entered
+    // successfully.
+    // TODO: Find alternate approach or only use this method after a (re)boot?
+    SpiSerial.println("ver");
+
+    if (findInResponse("\r\nWiFly Ver", 1000)) {
+      // TODO: Flush or leave remainder of output?
+      return true;
+    }
+  }
+  return false;
+}
+
+
+
 void WiFlyDevice::attemptSwitchToCommandMode() {
   /*
    */
