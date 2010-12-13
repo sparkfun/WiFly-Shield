@@ -75,7 +75,7 @@ boolean Client::connect() {
     // so the connection is already established.
   } else {
     // TODO: Track state more?
-    _WiFly.switchToCommandMode();
+    _WiFly.enterCommandMode();
     
     _WiFly.sendCommand("open ", true, "" /* TODO: Remove this dummy value */);
     
@@ -167,7 +167,7 @@ void Client::stop() {
   // In the interests of getting something out the door--that somewhat
   // works--this is what we're going with at the moment.
 
-  _WiFly.switchToCommandMode();
+  _WiFly.enterCommandMode();
   _WiFly.uart.println("close");
   // We ignore the response which could be "*CLOS*" or could be an
   // error if the connection is no longer open.

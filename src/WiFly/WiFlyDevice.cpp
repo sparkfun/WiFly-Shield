@@ -331,7 +331,7 @@ void WiFlyDevice::requireFlowControl() {
 
   DEBUG_LOG(1, "Entered requireFlowControl");
 
-  switchToCommandMode();
+  enterCommandMode();
 
   // TODO: Reboot here to ensure we get an accurate response and
   //       don't unintentionally save a configuration we don't intend?
@@ -370,7 +370,7 @@ void WiFlyDevice::requireFlowControl() {
 void WiFlyDevice::setConfiguration() {
   /*
    */
-  switchToCommandMode();
+  enterCommandMode();
 
   // TODO: Handle configuration better
   // Turn off auto-connect
@@ -436,7 +436,7 @@ const char * WiFlyDevice::ip() {
   
   // TODO: Ensure we're not in a connection?
 
-  switchToCommandMode();
+  enterCommandMode();
 
   // Version 2.19 of the WiFly firmware has a "get ip a" command but
   // we can't use it because we want to work with 2.18 too.
