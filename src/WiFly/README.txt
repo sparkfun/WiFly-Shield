@@ -132,6 +132,12 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
 
   * Added 'SpiUartTerminal' troubleshooting tool.
 
+  * Added some debugging support.
+
+  * Modified command mode entry method to hopefully work more reliably.
+
+  * Modified software reboot to hopefully work more reliably.
+
 + alpha 1 -- 31 August 2010 -- "August Gratitude"
 
   * Change default crystal speed to match new 14MHz crystal used.
