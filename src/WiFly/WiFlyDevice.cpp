@@ -5,6 +5,7 @@
 
 #include "Debug.h"
 
+
 boolean WiFlyDevice::findInResponse(const char *toMatch,
 				    unsigned int timeOut = 0) {
   /*
