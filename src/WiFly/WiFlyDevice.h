@@ -51,6 +51,7 @@ class WiFlyDevice {
 
     boolean findInResponse(const char *toMatch, unsigned int timeOut);
     boolean enterCommandMode(boolean isAfterBoot);
+    boolean softwareReboot(boolean isAfterBoot);
 
     friend class Client;
     friend class Server;

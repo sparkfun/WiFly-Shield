@@ -239,6 +239,36 @@ void WiFlyDevice::switchToCommandMode() {
 }
 
 
+
+#define SOFTWARE_REBOOT_RETRY_ATTEMPTS 5
+
+boolean WiFlyDevice::softwareReboot(boolean isAfterBoot = true) {
+  /*
+
+   */
+
+  for (int retryCount = 0;
+       retryCount < SOFTWARE_REBOOT_RETRY_ATTEMPTS;
+       retryCount++) {  
+    
+    // TODO: Have the post-boot delay here rather than in enterCommandMode()?
+
+    if (!enterCommandMode(isAfterBoot)) {
+      return false; // If the included retries have failed we give up
+    }
+  
+    SpiSerial.println("reboot");
+  
+    if (findInResponse("*READY*", 2000)) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+
+
 void WiFlyDevice::reboot() {
   /*
    */
