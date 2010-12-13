@@ -158,22 +158,6 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
 
 
 
-void WiFlyDevice::attemptSwitchToCommandMode() {
-  /*
-   */
-
-  DEBUG_LOG(2, "Entered attemptSwitchToCommandMode");
-
-  // Exit command mode if we haven't already
-  uart.println("");  
-  uart.println("exit");
-
-  // Attempt to enter command mode
-  uart.flush();
-  uart.print("$$$");
-}
-
-
 void WiFlyDevice::skipRemainderOfResponse() {
   /*
    */
@@ -227,21 +211,6 @@ void WiFlyDevice::begin() {
 }
 
 // TODO: Create a `begin()` that allows IP etc to be supplied.
-
-
-void WiFlyDevice::switchToCommandMode() {
-  /*
-   */
-
-  DEBUG_LOG(1, "Entered switchToCommandMode");
-
-  attemptSwitchToCommandMode();
-      
-  while (!responseMatched("CMD")) {
-    skipRemainderOfResponse(); // TODO: Is this necessary?
-    attemptSwitchToCommandMode();
-  }
-}
 
 
 
