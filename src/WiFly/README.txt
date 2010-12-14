@@ -143,6 +143,13 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
 
 + alpha 2 -- XX Xxxxxx 201x -- "Azalea Galaxy"
 
+  * NOTE: New configuration location! You now need to modify the value
+    	  of 'SHIELD_REVISION' in the file 'Configuration.h' to
+    	  indicate what revision of the WiFly shield you are
+    	  using. See the documentation in the file for further
+    	  detail. The value defaults to the most recent revision sold
+    	  at the time of the code release.
+
   * Added 'SpiUartTerminal' troubleshooting tool.
 
   * Added some debugging support.
@@ -150,6 +157,13 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
   * Modified command mode entry method to hopefully work more reliably.
 
   * Modified software reboot to hopefully work more reliably.
+
+  * Added support for hardware reset which should be more reliable than
+    software reboot on board revisions that support it (currently only the
+    most recent revision).
+
+  * Added support for further board revision feature support configuration.
+
 
 + alpha 1 -- 31 August 2010 -- "August Gratitude"
 
