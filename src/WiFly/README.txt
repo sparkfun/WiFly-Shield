@@ -64,6 +64,19 @@ There is also a troubleshooting tool:
 
   * SpiUartTerminal: enter command mode and send commands manually
 
+
+= Configuration =
+
+Different revisions of the WiFly shield support different features. If
+you are using an older revision of the shield you will need to modify
+the value of 'SHIELD_REVISION' in the file 'Configuration.h' to
+indicate which revision of the WiFly shield you are using. See the
+documentation in the file for further detail.
+
+The value defaults to the most recent revision sold at the time of
+code release.
+
+
 = Known Issues =
 
 This is an alpha release--this means it's non-feature complete and may
