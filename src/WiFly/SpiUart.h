@@ -65,6 +65,10 @@ class SpiUartDevice : public SpiDevice, public Print {
     using Print::write;
 #endif
     void flush();
+
+    // These are specific to the SPI UART
+    void ioSetDirection(unsigned char bits);
+    void ioSetState(unsigned char bits);
   
   private:
     void writeRegister(byte registerAddress, byte data);

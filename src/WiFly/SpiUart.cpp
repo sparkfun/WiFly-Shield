@@ -252,4 +252,15 @@ void SpiUartDevice::flush() {
 }
 
 
+void SpiUartDevice::ioSetDirection(unsigned char bits) {
+  /*
+   */
+  writeRegister(IODIR, bits);
+}
 
+
+void SpiUartDevice::ioSetState(unsigned char bits) {
+  /*
+   */
+  writeRegister(IOSTATE, bits);
+}
