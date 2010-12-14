@@ -154,7 +154,9 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
 
   * Added some debugging support.
 
-  * Modified command mode entry method to hopefully work more reliably.
+  * Modified command mode entry method to hopefully work more
+    reliably.  Includes use of guard time as originally inspired by
+    World Mood Light.
 
   * Modified software reboot to hopefully work more reliably.
 
