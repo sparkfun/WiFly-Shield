@@ -248,6 +248,16 @@ boolean WiFlyDevice::softwareReboot(boolean isAfterBoot = true) {
   return false;
 }
 
+boolean WiFlyDevice::hardwareReboot() {
+  /*
+   */
+  uart.ioSetDirection(0b00000010);
+  uart.ioSetState(0b00000000);
+  delay(1);
+  uart.ioSetState(0b00000010);
+
+  return findInResponse("*READY*", 2000);
+}
 
 
 void WiFlyDevice::reboot() {
