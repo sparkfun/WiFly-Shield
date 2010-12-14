@@ -260,13 +260,19 @@ boolean WiFlyDevice::hardwareReboot() {
 }
 
 
+#if USE_HARDWARE_RESET
+#define REBOOT hardwareReboot
+#else
+#define REBOOT softwareReboot
+#endif
+
 void WiFlyDevice::reboot() {
   /*
    */
   
   DEBUG_LOG(1, "Entered reboot");
 
-  if (!softwareReboot()) {
+  if (!REBOOT()) {
     DEBUG_LOG(1, "Failed to reboot. Halting.");
     while (1) {}; // Hang. TODO: Handle differently?
   }
