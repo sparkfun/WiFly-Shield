@@ -2,6 +2,8 @@
 #ifndef __SPIUART_H__
 #define __SPIUART_H__
 
+#include "Configuration.h"
+
 #include "_Spi.h"
 
 // Until we implement a bulk transfer method that takes into account

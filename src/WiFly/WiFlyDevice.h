@@ -1,6 +1,8 @@
 #ifndef __WIFLY_DEVICE_H__
 #define __WIFLY_DEVICE_H__
 
+#include "Configuration.h"
+
 #define DEFAULT_SERVER_PORT 80
 
 class WiFlyDevice {
