@@ -16,7 +16,9 @@
 // The original crystal frequency used on the board (~12MHz) didn't
 // give a good range of baud rates so around July 2010 the crystal
 // was replaced with a better frequency (~14MHz).
+#ifndef USE_14_MHZ_CRYSTAL
 #define USE_14_MHZ_CRYSTAL true // true (14MHz) , false (12 MHz)
+#endif
 
 #if USE_14_MHZ_CRYSTAL
 #define XTAL_FREQUENCY 14745600UL // On-board crystal (New mid-2010 Version)
