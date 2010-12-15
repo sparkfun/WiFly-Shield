@@ -173,6 +173,7 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
 
   * Added support for further board revision feature support configuration.
 
+  * Added support for joining Open networks (i.e. without a passphrase or key).
 
 + alpha 1 -- 31 August 2010 -- "August Gratitude"
 
