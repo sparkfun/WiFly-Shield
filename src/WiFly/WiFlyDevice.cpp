@@ -384,16 +384,16 @@ void WiFlyDevice::setConfiguration() {
 }
 
 
-boolean WiFlyDevice::join(const char *ssid, const char *passphrase) {
+boolean WiFlyDevice::join(const char *ssid) {
   /*
    */
   // TODO: Handle other authentication methods
-  // TODO: Handle escaping spaces/$ in passphrase and SSID
+  // TODO: Handle escaping spaces/$ in SSID
   // TODO: Allow for timeout?
 
-  // TODO: Do this better...
-  sendCommand("set wlan passphrase ", true);
-  sendCommand(passphrase);
+  // TODO: Do we want to set the passphrase/key to empty when they're
+  //       not required? (Probably not necessary as I think module
+  //       ignores them when they're not required.)
 
   sendCommand("join ", true);  
   // TODO: Actually detect failure to associate
@@ -406,6 +406,20 @@ boolean WiFlyDevice::join(const char *ssid, const char *passphrase) {
   }
   return false;
 }
+
+
+boolean WiFlyDevice::join(const char *ssid, const char *passphrase) {
+  /*
+   */
+  // TODO: Handle escaping spaces/$ in passphrase and SSID
+
+  // TODO: Do this better...
+  sendCommand("set wlan passphrase ", true);
+  sendCommand(passphrase);
+  
+  return join(ssid);
+}
+
 
 #define IP_ADDRESS_BUFFER_SIZE 16 // "255.255.255.255\0"
 

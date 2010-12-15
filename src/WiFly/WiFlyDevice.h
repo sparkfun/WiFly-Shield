@@ -10,6 +10,7 @@ class WiFlyDevice {
     WiFlyDevice(SpiUartDevice& theUart);
     void begin();
     //TODO: Add additional join methods    
+    boolean join(const char *ssid);
     boolean join(const char *ssid, const char *passphrase);
 
     const char * ip();
