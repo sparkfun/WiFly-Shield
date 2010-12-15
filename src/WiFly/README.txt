@@ -21,8 +21,8 @@ separate breakout board:
 
 = Usage =
 
-This is how you connect to a wireless network and use DHCP to obtain
-an IP address and DNS configuration:
+This is how you connect to a WPA wireless network with a passphrase
+and use DHCP to obtain an IP address and DNS configuration:
 
 ----
 #include "WiFly.h"
@@ -39,8 +39,16 @@ void setup() {
 }
 ---
 
-From then on you can use the Client and Server classes (re-implemented
-for the WiFly) mostly as normal.
+If the network you want to connect to has no passphrase you can use this form:
+
+---
+  if (!WiFly.join("ssid")) {
+     // Handle the failure
+  }
+---
+
+In both cases from then on you can use the Client and Server classes
+(re-implemented for the WiFly) mostly as normal.
 
 You can supply a domain name rather than an IP address for client
 connections:
@@ -85,12 +93,11 @@ works in most cases.
 
 There are some known issues:
 
- * Only supports WPA networks with passwords. If you have a network
-   without a passphrase then it should work if you supply a dummy
-   passphrase. If you have a WEP network you should probably change it
-   to use WPA instead. :) If that's not an option then it should be
-   possible to change the library code to set the WEP key rather than
-   a WPA passphrase.
+ * Only supports WPA networks with passwords or open networks. If you
+   have a WEP network you should probably change it to use WPA
+   instead. :) If that's not an option then it should be possible to
+   change the library code to set the WEP key rather than a WPA
+   passphrase.
 
  * Incomplete documentation.
 
