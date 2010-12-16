@@ -397,6 +397,7 @@ boolean WiFlyDevice::join(const char *ssid) {
 
   sendCommand("join ", true);  
   // TODO: Actually detect failure to associate
+  // TODO: Handle connecting to Adhoc device
   if (sendCommand(ssid, false, "Associated!")) {
     // TODO: Extract information from complete response?
     // TODO: Change this to still work when server mode not active
