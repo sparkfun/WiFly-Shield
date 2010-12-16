@@ -195,6 +195,8 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
 
   * Added 'HardwareFactoryReset' tool to help with troubleshooting.
 
+  * Added (untested) WEP network support.
+
 
 + alpha 1 -- 31 August 2010 -- "August Gratitude"
 
