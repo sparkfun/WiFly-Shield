@@ -176,6 +176,9 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
 
   * Added support for joining Open networks (i.e. without a passphrase or key).
 
+  * Added 'HardwareFactoryReset' tool to help with troubleshooting.
+
+
 + alpha 1 -- 31 August 2010 -- "August Gratitude"
 
   * Change default crystal speed to match new 14MHz crystal used.
