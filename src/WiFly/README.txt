@@ -166,7 +166,7 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
 
 = Changelog =
 
-+ alpha 2 -- XX Xxxxxx 201x -- "Azalea Galaxy"
++ alpha 2 -- 17 December 2010 -- "Azalea Galaxy"
 
   * NOTE: New configuration location! You now need to modify the value
     	  of 'SHIELD_REVISION' in the file 'Configuration.h' to
