@@ -13,8 +13,6 @@
 
 * Special case version 2.19 firmware with passphrase length bug?
 
-* Make compatible with use of pins_arduino.h as referenced <http://forum.sparkfun.com/viewtopic.php?p=113037#p113037> and <http://code.google.com/p/arduino/source/detail?spec=svn1027&r=1027>. (Including use of SS rather than CS.)
-
 * Reimplement release script. Including handling credentials issue.
 
 * Support WEP out of the box.
