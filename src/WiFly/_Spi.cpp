@@ -11,10 +11,10 @@ void SpiDevice::begin() {
   /*
     
     Use the default chip select pin as specified by
-    the CS define in the header.
+    the SS define in the header.
     
    */
-  begin(CS);
+  begin(SS);
 }
 
 

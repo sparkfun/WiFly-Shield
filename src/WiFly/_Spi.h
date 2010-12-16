@@ -7,11 +7,7 @@
 
 #include <WProgram.h>
 
-// SPI Pin definitions
-#define CS         10
-#define MOSI       11
-#define MISO       12
-#define SCK        13
+#include <pins_arduino.h>
 
 
 // TODO: Do we want to use this instead: <http://www.arduino.cc/playground/Code/Spi>
