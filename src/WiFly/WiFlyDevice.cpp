@@ -409,14 +409,22 @@ boolean WiFlyDevice::join(const char *ssid) {
 }
 
 
-boolean WiFlyDevice::join(const char *ssid, const char *passphrase) {
+boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
+			  boolean isWPA) {
   /*
    */
   // TODO: Handle escaping spaces/$ in passphrase and SSID
 
   // TODO: Do this better...
-  sendCommand("set wlan passphrase ", true);
-  sendCommand(passphrase);
+  sendCommand("set wlan ", true);
+
+  if (isWPA) {
+    sendCommand("passphrase ", true);
+  } else {
+    sendCommand("key ", true);
+  }
+  
+  sendCommand(passphrase);    
   
   return join(ssid);
 }

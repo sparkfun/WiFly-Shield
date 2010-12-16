@@ -8,6 +8,8 @@
 #include "Client.h"
 #include "Server.h"
 
+#define WEP_MODE false
+#define WPA_MODE true
 
 // TODO: Don't make this extern
 // TODO: How/whether to allow sending of arbitrary data/commands over serial?
