@@ -175,13 +175,9 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
     	  detail. The value defaults to the most recent revision sold
     	  at the time of the code release.
 
-  * Added 'SpiUartTerminal' troubleshooting tool.
+  * Added support for joining Open networks (i.e. without a passphrase or key).
 
-  * Added some debugging support.
-
-  * Modified command mode entry method to hopefully work more
-    reliably.  Includes use of guard time as originally inspired by
-    World Mood Light.
+  * Added (untested) WEP network support.
 
   * Modified software reboot to hopefully work more reliably.
 
@@ -189,13 +185,17 @@ Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
     software reboot on board revisions that support it (currently only the
     most recent revision).
 
-  * Added support for further board revision feature support configuration.
+  * Modified command mode entry method to hopefully work more
+    reliably.  Includes use of guard time as originally inspired by
+    World Mood Light.
 
-  * Added support for joining Open networks (i.e. without a passphrase or key).
+  * Added 'SpiUartTerminal' troubleshooting tool.
 
   * Added 'HardwareFactoryReset' tool to help with troubleshooting.
 
-  * Added (untested) WEP network support.
+  * Added support for further board revision feature support configuration.
+
+  * Added some debugging support.
 
 
 + alpha 1 -- 31 August 2010 -- "August Gratitude"
