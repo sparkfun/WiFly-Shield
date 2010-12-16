@@ -47,8 +47,25 @@ If the network you want to connect to has no passphrase you can use this form:
   }
 ---
 
-In both cases from then on you can use the Client and Server classes
-(re-implemented for the WiFly) mostly as normal.
+If the network you want to connect to is using WEP use this form:
+
+---
+  if (!WiFly.join("NETWORK", "00112233445566778899AABBCC", WEP_MODE)) {
+     // Handle the failure
+  }
+---
+
+Note the description of the WEP key from the WiFly user guide:
+
+ * Key must be EXACTLY 26 ASCII characters representing 13 bytes.
+
+ * In HEX format, hex digits > 9 can be either upper or lower case.
+ 
+ * "The Wifly GSX only supports “open” key mode, 128 bit keys for WEP."
+
+Whatever connection method you use, once you have joined you can use
+the Client and Server classes (re-implemented for the WiFly) mostly as
+normal.
 
 You can supply a domain name rather than an IP address for client
 connections:
@@ -94,11 +111,11 @@ works in most cases.
 
 There are some known issues:
 
- * Only supports WPA networks with passwords or open networks. If you
-   have a WEP network you should probably change it to use WPA
-   instead. :) If that's not an option then it should be possible to
-   change the library code to set the WEP key rather than a WPA
-   passphrase.
+ * Connections to WEP networks have not really been tested--please try
+   it out and provide feedback. At the moment adhoc networks of any
+   type are not supported--the module supports them, the library just
+   hasn't been modified to recognise the different way the module
+   responds when connecting.
 
  * Incomplete documentation.
 
