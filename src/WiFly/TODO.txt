@@ -16,3 +16,5 @@
 * Reimplement release script. Including handling credentials issue.
 
 * Support WEP out of the box.
+
+* Handle connecting to adhoc networks.
