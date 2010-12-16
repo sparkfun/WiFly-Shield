@@ -68,9 +68,10 @@ This release of the library comes with three examples:
 For each example you will need to modify the file "Credentials.h" to
 supply your network's name (SSID) and passphrase.
 
-There is also a troubleshooting tool:
+There are also some troubleshooting tools:
 
   * SpiUartTerminal: enter command mode and send commands manually
+  * HardwareFactoryReset: hardware factory reset a WiFly module
 
 
 = Configuration =
