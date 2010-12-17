@@ -287,6 +287,10 @@ boolean WiFlyDevice::sendCommand(const char *command,
                                  const char *expectedResponse = "AOK") {
   /*
    */
+  DEBUG_LOG(1, "Entered sendCommand");
+  DEBUG_LOG(2, "Command:");
+  DEBUG_LOG(2, command);
+
   uart.print(command);
   
   if (!isMultipartCommand) {
