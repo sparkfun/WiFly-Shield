@@ -496,6 +496,37 @@ const char * WiFlyDevice::ip() {
   return ip;
 }
 
+boolean WiFlyDevice::configure(byte option, unsigned long value) {
+  /*
+   */
+
+  // TODO: Allow options to be supplied earlier?
+
+  switch (option) {
+    case WIFLY_BAUD:
+      // TODO: Use more of standard command sending method?
+      enterCommandMode();
+      uart.print("set uart instant ");
+      uart.println(value);
+      delay(10); // If we don't have this here when we specify the
+		 // baud as a number rather than a string it seems to
+		 // fail. TODO: Find out why.
+      SpiSerial.begin(value);
+      // For some reason the following check fails if it occurs before
+      // the change of SPI UART serial rate above--even though the
+      // documentation says the AOK is returned at the old baud
+      // rate. TODO: Find out why
+      if (!findInResponse("AOK", 100)) {
+	return false;
+      }
+      break;
+    default:
+      return false;
+      break;
+  }
+  return true;
+}
+
 
 // Preinstantiate required objects
 SpiUartDevice SpiSerial;
