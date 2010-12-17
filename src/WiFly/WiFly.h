@@ -8,6 +8,7 @@
 #include "Client.h"
 #include "Server.h"
 
+// Join modes
 #define WEP_MODE false
 #define WPA_MODE true
 
