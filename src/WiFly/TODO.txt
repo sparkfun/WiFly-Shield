@@ -3,8 +3,6 @@
 
 * Add mention of configuration change/save for flow control
 
-* Add Mega support from http://forum.sparkfun.com/viewtopic.php?f=13&t=22067
-
 * Add baud rate control.
 
 * Consider future support for firmware 2.20 which has better debug level control--including supressing DHCP messages?
