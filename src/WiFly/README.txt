@@ -103,6 +103,19 @@ The value defaults to the most recent revision sold at the time of
 code release.
 
 
+= Arduino Mega support =
+
+This library supports using the WiFly Shield with the Arduino Mega if
+four jumper wires are added. The following connections are required:
+
+ * Mega pin 53 to shield pin 10
+ * Mega pin 51 to shield pin 11
+ * Mega pin 50 to shield pin 12
+ * Mega pin 52 to shield pin 13
+
+In addition, code on the Mega must not use pins 10, 11, 12, or 13.
+
+
 = Known Issues =
 
 This is an alpha release--this means it's non-feature complete and may
