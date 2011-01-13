@@ -29,7 +29,7 @@ class WiFlyDevice {
     // when it's returned from Server.available(). This means that
     // the state changes in the client object's Client.stop() method
     // never get propagated to the Server's stored active client.
-    // Blah, blah, handwavy singleton mention. Trying to store the reference
+    // Blah, blah, hand-wavy singleton mention. Trying to store the reference
     // to the active client connection here runs into apparent circular
     // reference issues with header includes. So in an effort to get this out
     // the door we just share whether or not the current "active client"

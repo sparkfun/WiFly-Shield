@@ -67,7 +67,7 @@ void SpiUartDevice::initUart(unsigned long baudrate) {
     If initialisation fails this method does not return.
         
    */
-  // Initialize and test SC16IS750
+  // Initialise and test SC16IS750
   configureUart(baudrate);
   
   if(!uartConnected()){ 

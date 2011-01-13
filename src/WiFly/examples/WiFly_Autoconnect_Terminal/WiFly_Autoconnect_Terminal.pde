@@ -7,7 +7,7 @@
  *
  * This code was written to demonstrate the WiFly Shield from SparkFun Electronics
  * 
- * This code will initialize and test the SC16IS750 UART-SPI bridge, and automatically
+ * This code will initialise and test the SC16IS750 UART-SPI bridge, and automatically
  * connect to a WiFi network using the parameters given in the global variables.
  *
  * http://www.sparkfun.com

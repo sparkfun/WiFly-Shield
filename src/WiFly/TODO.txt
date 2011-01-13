@@ -5,7 +5,7 @@
 
 * Add baud rate control.
 
-* Consider future support for firmware 2.20 which has better debug level control--including supressing DHCP messages?
+* Consider future support for firmware 2.20 which has better debug level control--including suppressing DHCP messages?
 
 * Improve documentation.
 
