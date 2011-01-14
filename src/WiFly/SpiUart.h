@@ -13,7 +13,7 @@
 // Disabling the transfers means we use the standard byte-at-time routine
 // from the Print class.
 // This isn't a big issue at 9600 baud at least because sending things
-// a byte at a time doesn't slow us down noticably.
+// a byte at a time doesn't slow us down noticeably.
 // TODO: Implement better bulk transfer method
 #define ENABLE_BULK_TRANSFERS 0
 

@@ -2,7 +2,7 @@
 
   SpiUartTerminal - tool to help troubleshoot problems with WiFly shield
 
-  This code will initialize and test the SC16IS750 UART-SPI bridge then enable you
+  This code will initialise and test the SC16IS750 UART-SPI bridge then enable you
   to send commands to the WiFly module.
 
   Copyright (c) 2010 SparkFun Electronics. http://sparkfun.com LGPL 3.0

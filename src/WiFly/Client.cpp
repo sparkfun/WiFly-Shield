@@ -194,7 +194,7 @@ void Client::stop() {
 Client::operator bool() {
   /*
    */
-  // NOTE: Inkeeping with the Ethernet Client class
+  // NOTE: In keeping with the Ethernet Client class
   //       we use _ip == NULL, _domain == NULL, _port = 0 to
   //       indicate Server.available() found no connection.
   //       We use _ip == NULL, _domain == NULL, _port !=0 to
