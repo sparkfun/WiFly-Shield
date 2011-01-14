@@ -7,9 +7,9 @@
 
 
 boolean WiFlyDevice::findInResponse(const char *toMatch,
-				    unsigned int timeOut = 0) {
+                                    unsigned int timeOut = 0) {
   /*
-     
+
    */
 
   // TODO: Change 'sendCommand' to use 'findInResponse' and have timeouts,
@@ -19,17 +19,17 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
   //       types of timeout?
 
   int byteRead;
-  
+
   unsigned int timeOutTarget; // in milliseconds
-  
-  
+
+
   DEBUG_LOG(1, "Entered findInResponse");
   DEBUG_LOG(2, "Want to match:");
   DEBUG_LOG(2, toMatch);
   DEBUG_LOG(3, "Found:");
 
   for (unsigned int offset = 0; offset < strlen(toMatch); offset++) {
-    
+
     // Reset after successful character read
     timeOutTarget = millis() + timeOut; // Doesn't handle timer wrapping
 
@@ -63,17 +63,17 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
       continue;
     }
   }
-  
+
   return true;
 }
 
 
 
 boolean WiFlyDevice::responseMatched(const char *toMatch) {
- /*
-  */ 
+  /*
+   */
   boolean matchFound = true;
-  
+
   DEBUG_LOG(3, "Entered responseMatched");
 
   for (unsigned int offset = 0; offset < strlen(toMatch); offset++) {
@@ -96,7 +96,7 @@ boolean WiFlyDevice::responseMatched(const char *toMatch) {
 
 boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
   /*
-    
+
    */
 
   DEBUG_LOG(1, "Entered enterCommandMode");
@@ -121,11 +121,11 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
     if (isAfterBoot) {
       delay(1000); // This delay is so characters aren't missed after a reboot.
     }
-  
+
     delay(COMMAND_MODE_GUARD_TIME);
-    
+
     uart.print("$$$");
-    
+
     delay(COMMAND_MODE_GUARD_TIME);
 
     // We could already be in command mode or not.
@@ -139,13 +139,13 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
     // the version prompt (not that we actually check for it at the moment
     // (anymore)).
 
-    // TODO: Determine if we need less boilerplate here.  
-    
+    // TODO: Determine if we need less boilerplate here.
+
     uart.println();
-    uart.println();  
-  
+    uart.println();
+
     // TODO: Add flush with timeout here?
-    
+
     // This is used to determine whether command mode has been entered
     // successfully.
     // TODO: Find alternate approach or only use this method after a (re)boot?
@@ -164,20 +164,20 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
 void WiFlyDevice::skipRemainderOfResponse() {
   /*
    */
-  
+
   DEBUG_LOG(3, "Entered skipRemainderOfResponse");
 
     while (!(uart.available() && (uart.read() == '\n'))) {
       // Skip remainder of response
     }
-}  
+}
 
 
 void WiFlyDevice::waitForResponse(const char *toMatch) {
   /*
    */
-   
-   // Note: Never exits if the correct response is never found   
+
+   // Note: Never exits if the correct response is never found
    while(!responseMatched(toMatch)) {
      skipRemainderOfResponse();
    }
@@ -187,9 +187,9 @@ void WiFlyDevice::waitForResponse(const char *toMatch) {
 
 WiFlyDevice::WiFlyDevice(SpiUartDevice& theUart) : uart (theUart) {
   /*
-  
+
     Note: Supplied UART should/need not have been initialised first.
-    
+
    */
   // The WiFly requires the server port to be set between the `reboot`
   // and `join` commands so we go for a "useful" default first.
@@ -228,26 +228,26 @@ boolean WiFlyDevice::softwareReboot(boolean isAfterBoot = true) {
 
   for (int retryCount = 0;
        retryCount < SOFTWARE_REBOOT_RETRY_ATTEMPTS;
-       retryCount++) {  
-    
+       retryCount++) {
+
     // TODO: Have the post-boot delay here rather than in enterCommandMode()?
 
     if (!enterCommandMode(isAfterBoot)) {
       return false; // If the included retries have failed we give up
     }
-  
+
     uart.println("reboot");
 
     // For some reason the full "*Reboot*" message doesn't always
     // seem to be received so we look for the later "*READY*" message instead.
 
     // TODO: Extract information from boot? e.g. version and MAC address
-  
+
     if (findInResponse("*READY*", 2000)) {
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -272,7 +272,7 @@ boolean WiFlyDevice::hardwareReboot() {
 void WiFlyDevice::reboot() {
   /*
    */
-  
+
   DEBUG_LOG(1, "Entered reboot");
 
   if (!REBOOT()) {
@@ -292,17 +292,17 @@ boolean WiFlyDevice::sendCommand(const char *command,
   DEBUG_LOG(2, command);
 
   uart.print(command);
-  
+
   if (!isMultipartCommand) {
     uart.flush();
     uart.println();
-  
+
     // TODO: Handle other responses
     //       (e.g. autoconnect message before it's turned off,
     //        DHCP messages, and/or ERR etc)
     waitForResponse(expectedResponse);
-  }    
-  
+  }
+
   return true;
 }
 
@@ -316,8 +316,8 @@ void WiFlyDevice::requireFlowControl() {
 
     Note: Any other configuration changes made since the last
           reboot will also be saved by this function so this
-	  function should ideally be called immediately after a
-	  reboot.
+          function should ideally be called immediately after a
+          reboot.
 
    */
 
@@ -379,12 +379,12 @@ void WiFlyDevice::setConfiguration() {
 
   // Turn off remote connect message
   sendCommand("set comm remote 0");
-  
+
   // Turn off status messages
   // sendCommand("set sys printlvl 0");
-  
+
   // TODO: Change baud rate and then re-connect?
-  
+
   // Turn off RX data echo
   // TODO: Should really treat as bitmask
   // sendCommand("set uart mode 0");
@@ -402,7 +402,7 @@ boolean WiFlyDevice::join(const char *ssid) {
   //       not required? (Probably not necessary as I think module
   //       ignores them when they're not required.)
 
-  sendCommand("join ", true);  
+  sendCommand("join ", true);
   // TODO: Actually detect failure to associate
   // TODO: Handle connecting to Adhoc device
   if (sendCommand(ssid, false, "Associated!")) {
@@ -417,7 +417,7 @@ boolean WiFlyDevice::join(const char *ssid) {
 
 
 boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
-			  boolean isWPA) {
+                          boolean isWPA) {
   /*
    */
   // TODO: Handle escaping spaces/$ in passphrase and SSID
@@ -430,9 +430,9 @@ boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
   } else {
     sendCommand("key ", true);
   }
-  
-  sendCommand(passphrase);    
-  
+
+  sendCommand(passphrase);
+
   return join(ssid);
 }
 
@@ -448,7 +448,7 @@ const char * WiFlyDevice::ip() {
 
    */
   static char ip[IP_ADDRESS_BUFFER_SIZE] = "";
-  
+
   // TODO: Ensure we're not in a connection?
 
   enterCommandMode();
@@ -509,15 +509,15 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
       uart.print("set uart instant ");
       uart.println(value);
       delay(10); // If we don't have this here when we specify the
-		 // baud as a number rather than a string it seems to
-		 // fail. TODO: Find out why.
+                 // baud as a number rather than a string it seems to
+                 // fail. TODO: Find out why.
       SpiSerial.begin(value);
       // For some reason the following check fails if it occurs before
       // the change of SPI UART serial rate above--even though the
       // documentation says the AOK is returned at the old baud
       // rate. TODO: Find out why
       if (!findInResponse("AOK", 100)) {
-	return false;
+        return false;
       }
       break;
     default:

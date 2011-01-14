@@ -81,17 +81,17 @@ boolean Client::connect() {
     
     if (_ip != NULL) {
       for (int index = 0; /* break inside loop*/ ; index++) {
-	_WiFly.uart.print(_ip[index], DEC);
-	if (index == 3) {
-	  break;
-	}
-	_WiFly.uart.print('.');
+        _WiFly.uart.print(_ip[index], DEC);
+        if (index == 3) {
+          break;
+        }
+        _WiFly.uart.print('.');
       }
     } else if (_domain != NULL) {
       _WiFly.uart.print(_domain);
     } else {
       while (1) {
-	// This should never happen
+        // This should never happen
       }
     }
     
