@@ -12,7 +12,7 @@ class WiFlyDevice {
 
     boolean join(const char *ssid);
     boolean join(const char *ssid, const char *passphrase, 
-		 boolean isWPA = true);
+                 boolean isWPA = true);
 
     boolean configure(byte option, unsigned long value);
 
