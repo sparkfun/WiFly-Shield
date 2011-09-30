@@ -155,7 +155,7 @@ byte SpiUartDevice::readRegister(byte registerAddress) {
 }
 
 
-byte SpiUartDevice::available() {
+int SpiUartDevice::available() {
   /*
   
     Get the number of bytes (characters) available for reading.

@@ -20,8 +20,7 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
 
   int byteRead;
 
-  unsigned int timeOutTarget; // in milliseconds
-
+  unsigned long timeOutTarget; // in milliseconds
 
   DEBUG_LOG(1, "Entered findInResponse");
   DEBUG_LOG(2, "Want to match:");
@@ -33,7 +32,7 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
     // Reset after successful character read
     timeOutTarget = millis() + timeOut; // Doesn't handle timer wrapping
 
-    while (!uart.available()) {
+    while (!uart->available()) {
       // Wait, with optional time out.
       if (timeOut > 0) {
         if (millis() > timeOutTarget) {
@@ -45,7 +44,7 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
 
     // We read this separately from the conditional statement so we can
     // log the character read when debugging.
-    byteRead = uart.read();
+    byteRead = uart->read();
 
     delay(1); // Removing logging may affect timing slightly
 
@@ -63,6 +62,7 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
       continue;
     }
   }
+  DEBUG_LOG(2, "Response found");
 
   return true;
 }
@@ -74,13 +74,13 @@ boolean WiFlyDevice::responseMatched(const char *toMatch) {
    */
   boolean matchFound = true;
 
-  DEBUG_LOG(3, "Entered responseMatched");
-
+DEBUG_LOG(3, "Entered responseMatched");
   for (unsigned int offset = 0; offset < strlen(toMatch); offset++) {
-    while (!uart.available()) {
+    while (!uart->available()) {
       // Wait -- no timeout
     }
-    if (uart.read() != toMatch[offset]) {
+DEBUG_LOG(3,(char)uart->peek());
+    if (uart->read() != toMatch[offset]) {
       matchFound = false;
       break;
     }
@@ -124,7 +124,7 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
 
     delay(COMMAND_MODE_GUARD_TIME);
 
-    uart.print("$$$");
+    uart->print("$$$");
 
     delay(COMMAND_MODE_GUARD_TIME);
 
@@ -141,15 +141,15 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
 
     // TODO: Determine if we need less boilerplate here.
 
-    uart.println();
-    uart.println();
+    uart->println();
+    uart->println();
 
     // TODO: Add flush with timeout here?
 
     // This is used to determine whether command mode has been entered
     // successfully.
     // TODO: Find alternate approach or only use this method after a (re)boot?
-    uart.println("ver");
+    uart->println("ver");
 
     if (findInResponse("\r\nWiFly Ver", 1000)) {
       // TODO: Flush or leave remainder of output?
@@ -167,7 +167,7 @@ void WiFlyDevice::skipRemainderOfResponse() {
 
   DEBUG_LOG(3, "Entered skipRemainderOfResponse");
 
-    while (!(uart.available() && (uart.read() == '\n'))) {
+    while (!(uart->available() && (uart->read() == '\n'))) {
       // Skip remainder of response
     }
 }
@@ -176,7 +176,6 @@ void WiFlyDevice::skipRemainderOfResponse() {
 void WiFlyDevice::waitForResponse(const char *toMatch) {
   /*
    */
-
    // Note: Never exits if the correct response is never found
    while(!responseMatched(toMatch)) {
      skipRemainderOfResponse();
@@ -185,12 +184,14 @@ void WiFlyDevice::waitForResponse(const char *toMatch) {
 
 
 
-WiFlyDevice::WiFlyDevice(SpiUartDevice& theUart) : uart (theUart) {
+WiFlyDevice::WiFlyDevice(SpiUartDevice& theUart) : SPIuart (theUart) {
   /*
 
     Note: Supplied UART should/need not have been initialised first.
 
    */
+  bDifferentUart = 0;
+  uart = &SPIuart;
   // The WiFly requires the server port to be set between the `reboot`
   // and `join` commands so we go for a "useful" default first.
   serverPort = DEFAULT_SERVER_PORT;
@@ -201,15 +202,21 @@ WiFlyDevice::WiFlyDevice(SpiUartDevice& theUart) : uart (theUart) {
 //       and/or allow the select pin to be supplied.
 
 
+void  WiFlyDevice::setUart(Stream* newUart)
+{
+  bDifferentUart = 1;
+  uart = newUart;
+}
+
 void WiFlyDevice::begin() {
   /*
    */
 
   DEBUG_LOG(1, "Entered WiFlyDevice::begin()");
 
-  uart.begin();
+  if (!bDifferentUart) SPIuart.begin();
   reboot(); // Reboot to get device into known state
-  requireFlowControl();
+  //requireFlowControl();
   setConfiguration();
 }
 
@@ -236,7 +243,7 @@ boolean WiFlyDevice::softwareReboot(boolean isAfterBoot = true) {
       return false; // If the included retries have failed we give up
     }
 
-    uart.println("reboot");
+    uart->println("reboot");
 
     // For some reason the full "*Reboot*" message doesn't always
     // seem to be received so we look for the later "*READY*" message instead.
@@ -254,12 +261,15 @@ boolean WiFlyDevice::softwareReboot(boolean isAfterBoot = true) {
 boolean WiFlyDevice::hardwareReboot() {
   /*
    */
-  uart.ioSetDirection(0b00000010);
-  uart.ioSetState(0b00000000);
-  delay(1);
-  uart.ioSetState(0b00000010);
-
-  return findInResponse("*READY*", 2000);
+  if (!bDifferentUart)
+  {
+    SPIuart.ioSetDirection(0b00000010);
+    SPIuart.ioSetState(0b00000000);
+    delay(1);
+    SPIuart.ioSetState(0b00000010);
+    return findInResponse("*READY*", 2000);
+  }
+  return softwareReboot();
 }
 
 
@@ -290,18 +300,21 @@ boolean WiFlyDevice::sendCommand(const char *command,
   DEBUG_LOG(1, "Entered sendCommand");
   DEBUG_LOG(2, "Command:");
   DEBUG_LOG(2, command);
-
-  uart.print(command);
-
+  uart->print(command);
+  delay(20);
   if (!isMultipartCommand) {
-    uart.flush();
-    uart.println();
+    uart->flush();
+    uart->println();
 
     // TODO: Handle other responses
     //       (e.g. autoconnect message before it's turned off,
     //        DHCP messages, and/or ERR etc)
-    waitForResponse(expectedResponse);
+    if (!findInResponse(expectedResponse, 1000)) {
+      return false;
+    }
+    //waitForResponse(expectedResponse);
   }
+  DEBUG_LOG(2, "sendCommand exit True");
 
   return true;
 }
@@ -330,13 +343,13 @@ void WiFlyDevice::requireFlowControl() {
 
   sendCommand("get uart", false, "Flow=0x");
 
-  while (!uart.available()) {
+  while (!uart->available()) {
     // Wait to ensure we have the full response
   }
 
-  char flowControlState = uart.read();
+  char flowControlState = uart->read();
 
-  uart.flush();
+  uart->flush();
 
   if (flowControlState == '1') {
     return;
@@ -374,7 +387,7 @@ void WiFlyDevice::setConfiguration() {
   // Set server port
   sendCommand("set ip localport ", true);
   // TODO: Handle numeric arguments correctly.
-  uart.print(serverPort);
+  uart->print(serverPort);
   sendCommand("");
 
   // Turn off remote connect message
@@ -442,7 +455,6 @@ boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
 const char * WiFlyDevice::ip() {
   /*
 
-
     The return value is intended to be dropped directly
     into calls to 'print' or 'println' style methods.
 
@@ -462,7 +474,7 @@ const char * WiFlyDevice::ip() {
 
   // Copy the IP address from the response into our buffer
   while (offset < IP_ADDRESS_BUFFER_SIZE) {
-    newChar = uart.read();
+    newChar = uart->read();
 
     if (newChar == ':') {
       ip[offset] = '\x00';
@@ -482,7 +494,7 @@ const char * WiFlyDevice::ip() {
   // This should skip the remainder of the output.
   // TODO: Handle this better?
   waitForResponse("<");
-  while (uart.read() != ' ') {
+  while (uart->read() != ' ') {
     // Skip the prompt
   }
 
@@ -490,7 +502,7 @@ const char * WiFlyDevice::ip() {
   // in a state where it misses the first/next connection so for
   // now we don't check the response.
   // TODO: Fix this
-  uart.println("exit");
+  uart->println("exit");
   //sendCommand("exit", false, "EXIT");
 
   return ip;
@@ -506,12 +518,12 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
     case WIFLY_BAUD:
       // TODO: Use more of standard command sending method?
       enterCommandMode();
-      uart.print("set uart instant ");
-      uart.println(value);
+      uart->print("set uart instant ");
+      uart->println(value);
       delay(10); // If we don't have this here when we specify the
                  // baud as a number rather than a string it seems to
                  // fail. TODO: Find out why.
-      SpiSerial.begin(value);
+      SPIuart.begin(value);
       // For some reason the following check fails if it occurs before
       // the change of SPI UART serial rate above--even though the
       // documentation says the AOK is returned at the old baud
@@ -531,4 +543,3 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
 // Preinstantiate required objects
 SpiUartDevice SpiSerial;
 WiFlyDevice WiFly(SpiSerial);
-

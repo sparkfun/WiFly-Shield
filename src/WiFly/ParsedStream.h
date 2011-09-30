@@ -9,7 +9,9 @@
 
 #include <string.h>
 
-#include "SpiUart.h"
+#include <WProgram.h>
+
+//#include "SpiUart.h"
 
 struct ring_buffer {
   unsigned char buffer[RX_BUFFER_SIZE];
@@ -34,10 +36,11 @@ private:
 
   bool _closed;
 
-  SpiUartDevice& _uart;
+  Stream* _uart;
 
 public:
-  ParsedStream(SpiUartDevice& theUart);
+  ParsedStream();
+  void begin(Stream* theUart);
   uint8_t available(void);
   int read(void);
 

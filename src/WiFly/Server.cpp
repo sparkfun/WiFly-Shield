@@ -38,7 +38,7 @@ Client& Server::available() {
   // Return active server connection if present
   if (!activeClient) {
     // TODO: Handle this better
-    if (WiFly.uart.available() >= strlen(TOKEN_MATCH_OPEN)) {
+    if (WiFly.uart->available() >= strlen(TOKEN_MATCH_OPEN)) {
       if (WiFly.responseMatched(TOKEN_MATCH_OPEN)) {
 	// The following values indicate that the connection was
 	// created when acting as a server.
@@ -56,7 +56,7 @@ Client& Server::available() {
 	// Ignore other feedback from the WiFly module.
 	// TODO: Should we check we're not ditching a connect accidentally?
 	//WiFly.skipRemainderOfResponse();
-	WiFly.uart.flush();
+	WiFly.uart->flush();
       }
     }
   }

@@ -53,11 +53,11 @@
 #define BAUD_RATE_DEFAULT 9600 // WiFly default baudrate
 
 
-class SpiUartDevice : public SpiDevice, public Print {
+class SpiUartDevice : public SpiDevice, public Stream {
   
   public:
     void begin(unsigned long baudrate = BAUD_RATE_DEFAULT);
-    byte available();
+    int available();
     int read();
     void write(byte value);
     void write(const char *str);
@@ -67,6 +67,9 @@ class SpiUartDevice : public SpiDevice, public Print {
     using Print::write;
 #endif
     void flush();
+
+//required for Stream
+    int peek() {return 0;};
 
     // These are specific to the SPI UART
     void ioSetDirection(unsigned char bits);

@@ -15,12 +15,17 @@ void ParsedStream::storeByte(unsigned char c) {
   }
 }
 
-ParsedStream::ParsedStream(SpiUartDevice& uart) : _uart(uart) {
+ParsedStream::ParsedStream()
+{
   /*
    */
   reset();
 }
 
+void ParsedStream::begin(Stream* theUart)
+{
+  _uart = theUart;
+}
 
 void ParsedStream::reset() {
   /*
@@ -56,10 +61,10 @@ uint8_t ParsedStream::available() {
   
   // TODO: Don't refill if we're almost full and don't have a partial
   //       match?
-  while (!_closed && freeSpace() && _uart.available()) {
+
+  while (!_closed && freeSpace() && _uart->available()) {
     getByte();
   }
-
   return available(false);
 }
 
@@ -90,7 +95,6 @@ int ParsedStream::freeSpace() {
 
 void ParsedStream::getByte() {
   int c;
-
   if (_closed) {
     return;
   }
@@ -100,8 +104,7 @@ void ParsedStream::getByte() {
   }
   
   // TODO: Tidy this...
-  c = _uart.read();
-
+  c = _uart->read();
   if (c == -1) {
     return;
   }
