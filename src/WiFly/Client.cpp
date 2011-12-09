@@ -131,6 +131,12 @@ int Client::read() {
   return stream.read();
 }
 
+int Client::peek() {
+  if (!isOpen) {
+    return -1;
+  }
+  return stream.peek();
+}
 
 void Client::flush(void) {
   /*

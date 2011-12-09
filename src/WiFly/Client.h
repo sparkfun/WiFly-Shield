@@ -4,14 +4,14 @@
 #ifndef __WIFLY_CLIENT_H__
 #define __WIFLY_CLIENT_H__
 
-#include "Print.h"
+#include "Stream.h"
 
 #include "ParsedStream.h"
 
 #include "WiFlyDevice.h"
 
 // TODO: Call this 'WiFlyClient' instead?
-class Client : public Print {
+class Client : public Stream {
  public:
   Client(uint8_t *ip, uint16_t port);
   Client(const char* domain, uint16_t port);
@@ -25,6 +25,7 @@ class Client : public Print {
   int available();
   int read();
   void flush(void);
+  int peek();
 
   bool connected();
   void stop();

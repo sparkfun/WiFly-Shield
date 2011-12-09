@@ -43,6 +43,7 @@ public:
   void begin(Stream* theUart);
   uint8_t available(void);
   int read(void);
+  int peek(void);
 
   bool closed();
 

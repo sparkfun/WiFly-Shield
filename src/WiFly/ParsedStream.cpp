@@ -87,6 +87,20 @@ int ParsedStream::read(void) {
   }
 }
 
+int ParsedStream::peek(void) {
+
+  if (!available()) {
+    getByte();
+  }
+
+  if (!available()) {
+    return -1;
+  } else {
+    unsigned char c = _rx_buffer.buffer[_rx_buffer.tail];
+    return c;
+  }
+}
+
 
 
 int ParsedStream::freeSpace() {
