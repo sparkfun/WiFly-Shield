@@ -189,7 +189,7 @@ int SpiUartDevice::read() {
 }
 
 
-void SpiUartDevice::write(byte value) {
+size_t SpiUartDevice::write(byte value) {
   /*
   
     Write byte to UART.
@@ -202,17 +202,18 @@ void SpiUartDevice::write(byte value) {
 }
 
 
-void SpiUartDevice::write(const char *str) {
+size_t SpiUartDevice::write(const char *str, size_t size) {
   /*
   
     Write string to UART.
  
    */
-  write((const uint8_t *) str, strlen(str));  
-  while (readRegister(TXLVL) < 64) {
-    // Wait for empty TX buffer (slow)
-    // (But apparently still not slow enough to ensure delivery.)
-  };
+	while (size--)
+		write(*str++);  
+	while (readRegister(TXLVL) < 64) {
+		// Wait for empty TX buffer (slow)
+		// (But apparently still not slow enough to ensure delivery.)
+	};
 }
 
 #if ENABLE_BULK_TRANSFERS

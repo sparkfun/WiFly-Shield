@@ -5,8 +5,8 @@
 
 #include "WiFlyDevice.h"
 
-#include "Client.h"
-#include "Server.h"
+#include "WiFlyClient.h"
+#include "WiFlyServer.h"
 
 // Join modes
 #define WEP_MODE false

@@ -3,9 +3,9 @@
 // NOTE: Arbitrary cast to avoid constructor ambiguity.
 // TODO: Handle this a different way so we're not using
 //       NULL pointers all over the place?
-#define NO_CLIENT Client ((uint8_t*) NULL, 0)
+#define NO_CLIENT WiFlyClient ((uint8_t*) NULL, 0)
 
-Server::Server(uint16_t port) : activeClient(NO_CLIENT){
+WiFlyServer::WiFlyServer(uint16_t port) : activeClient(NO_CLIENT){
   /*
    */
   _port = port;
@@ -15,7 +15,7 @@ Server::Server(uint16_t port) : activeClient(NO_CLIENT){
   WiFly.serverPort = port;
 }
 
-void Server::begin() {
+void WiFlyServer::begin() {
   /*
    */
   // TODO: Send command to enable server functionality.
@@ -23,7 +23,7 @@ void Server::begin() {
 
 #define TOKEN_MATCH_OPEN "*OPEN*"
 
-Client& Server::available() {
+WiFlyClient& WiFlyServer::available() {
   /*
    */
 
@@ -44,7 +44,7 @@ Client& Server::available() {
 	// created when acting as a server.
 
 	// TODO: Work out why this alternate instantiation code doesn't work:
-	//activeClient = Client((uint8_t*) NULL, _port);
+	//activeClient = WiFlyClient((uint8_t*) NULL, _port);
 
 	activeClient._port = _port;
 	activeClient._domain = NULL;

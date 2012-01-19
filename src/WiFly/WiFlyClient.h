@@ -10,17 +10,16 @@
 
 #include "WiFlyDevice.h"
 
-// TODO: Call this 'WiFlyClient' instead?
-class Client : public Stream {
+class WiFlyClient : public Stream {
  public:
-  Client(uint8_t *ip, uint16_t port);
-  Client(const char* domain, uint16_t port);
+  WiFlyClient(uint8_t *ip, uint16_t port);
+  WiFlyClient(const char* domain, uint16_t port);
 
   boolean connect();
 
-  void write(byte value);
-  void write(const char *str);
-  void write(const uint8_t *buffer, size_t size);
+  size_t write(byte value);
+  size_t write(const char *str);
+  size_t write(const uint8_t *buffer, size_t size);
 
   int available();
   int read();
@@ -32,17 +31,19 @@ class Client : public Stream {
 
   operator bool();
 
- private:
-  WiFlyDevice& _WiFly;
 
   uint8_t *_ip;
   uint16_t _port;
 
   const char *_domain;
+private:
+  WiFlyDevice& _WiFly;
+
 
   bool isOpen;
 
   ParsedStream stream;
+
 
   // TODO: Work out why alternate instantiation code in
   //       Server.available() doesn't work and thus requires this:

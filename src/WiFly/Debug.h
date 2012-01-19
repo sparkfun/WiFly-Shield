@@ -27,8 +27,8 @@
 
 #define DEBUG_LOG(level, message) \
   if (DEBUG_LEVEL >= level) {\
-    Serial.print("DEBUG: ");\
-    Serial.println(message);\
+    Serial.print(F("DEBUG: "));\
+    Serial.println(F(message));\
   };
 
 #endif

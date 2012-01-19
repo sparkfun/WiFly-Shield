@@ -124,7 +124,7 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
 
     delay(COMMAND_MODE_GUARD_TIME);
 
-    uart->print("$$$");
+    uart->print(F("$$$"));
 
     delay(COMMAND_MODE_GUARD_TIME);
 
@@ -149,7 +149,7 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
     // This is used to determine whether command mode has been entered
     // successfully.
     // TODO: Find alternate approach or only use this method after a (re)boot?
-    uart->println("ver");
+    uart->println(F("ver"));
 
     if (findInResponse("\r\nWiFly Ver", 1000)) {
       // TODO: Flush or leave remainder of output?
@@ -209,15 +209,18 @@ void  WiFlyDevice::setUart(Stream* newUart)
 }
 
 void WiFlyDevice::begin() {
+	begin(false);
+}
+
+void WiFlyDevice::begin(boolean adhocMode) {
   /*
    */
-
   DEBUG_LOG(1, "Entered WiFlyDevice::begin()");
 
   if (!bDifferentUart) SPIuart.begin();
   reboot(); // Reboot to get device into known state
   //requireFlowControl();
-  setConfiguration();
+  setConfiguration(adhocMode);
 }
 
 // TODO: Create a `begin()` that allows IP etc to be supplied.
@@ -243,7 +246,7 @@ boolean WiFlyDevice::softwareReboot(boolean isAfterBoot = true) {
       return false; // If the included retries have failed we give up
     }
 
-    uart->println("reboot");
+    uart->println(F("reboot"));
 
     // For some reason the full "*Reboot*" message doesn't always
     // seem to be received so we look for the later "*READY*" message instead.
@@ -291,6 +294,33 @@ void WiFlyDevice::reboot() {
   }
 }
 
+
+boolean WiFlyDevice::sendCommand(const __FlashStringHelper *command,
+                                 boolean isMultipartCommand = false,
+                                 const char *expectedResponse = "AOK") {
+  /*
+   */
+  DEBUG_LOG(1, "Entered sendCommand");
+  DEBUG_LOG(2, "Command:");
+  DEBUG_LOG(2, command);
+  uart->print(command);
+  delay(20);
+  if (!isMultipartCommand) {
+    uart->flush();
+    uart->println();
+
+    // TODO: Handle other responses
+    //       (e.g. autoconnect message before it's turned off,
+    //        DHCP messages, and/or ERR etc)
+    if (!findInResponse(expectedResponse, 1000)) {
+      return false;
+    }
+    //waitForResponse(expectedResponse);
+  }
+  DEBUG_LOG(2, "sendCommand exit True");
+
+  return true;
+}
 
 boolean WiFlyDevice::sendCommand(const char *command,
                                  boolean isMultipartCommand = false,
@@ -341,7 +371,7 @@ void WiFlyDevice::requireFlowControl() {
   // TODO: Reboot here to ensure we get an accurate response and
   //       don't unintentionally save a configuration we don't intend?
 
-  sendCommand("get uart", false, "Flow=0x");
+  sendCommand(F("get uart"), false, "Flow=0x");
 
   while (!uart->available()) {
     // Wait to ensure we have the full response
@@ -356,9 +386,9 @@ void WiFlyDevice::requireFlowControl() {
   }
 
   // Enable flow control
-  sendCommand("set uart flow 1");
+  sendCommand(F("set uart flow 1"));
 
-  sendCommand("save", false, "Storing in config");
+  sendCommand(F("save"), false, "Storing in config");
 
   // Without this (or some delay--but this seemed more useful/reliable)
   // the reboot will fail because we seem to lose the response from the
@@ -367,42 +397,116 @@ void WiFlyDevice::requireFlowControl() {
   // instead of the correct:
   //     "*Reboot*WiFly Ver 2.18"
   // TODO: Solve the underlying problem
-  sendCommand("get uart", false, "Flow=0x1");
+  sendCommand(F("get uart"), false, "Flow=0x1");
 
   reboot();
 }
 
-void WiFlyDevice::setConfiguration() {
+void WiFlyDevice::setConfiguration(boolean adhocMode) {
   /*
    */
   enterCommandMode();
 
   // TODO: Handle configuration better
   // Turn off auto-connect
-  sendCommand("set wlan join 0");
+  sendCommand(F("set wlan join 0"));
 
   // TODO: Turn off server functionality until needed
   //       with "set ip protocol <something>"
 
   // Set server port
-  sendCommand("set ip localport ", true);
+  sendCommand(F("set ip localport "), true);
   // TODO: Handle numeric arguments correctly.
   uart->print(serverPort);
   sendCommand("");
 
   // Turn off remote connect message
-  sendCommand("set comm remote 0");
+  sendCommand(F("set comm remote 0"));
 
+  sendCommand(F("set t z 23"));
+  sendCommand(F("set time address 129.6.15.28"));
+  sendCommand(F("set time port 123"));
+  sendCommand(F("set t e 15"));
+
+  // CDT: Enable the DHCP mode again, if the shield
+  // was last used in AdHoc mode we won't do things correctly without
+  // these changes.
+  if(!adhocMode)
+  {
+	sendCommand(F("set wlan auth 4"));
+	
+	sendCommand(F("set ip dhcp 1"));
+  } 
+  else
+  {
+	setAdhocParams();
+  }
   // Turn off status messages
-  // sendCommand("set sys printlvl 0");
+  // sendCommand(F("set sys printlvl 0"));
 
   // TODO: Change baud rate and then re-connect?
 
   // Turn off RX data echo
   // TODO: Should really treat as bitmask
-  // sendCommand("set uart mode 0");
+  // sendCommand(F("set uart mode 0"));
 }
 
+void WiFlyDevice::setAdhocParams()
+{
+	// Disable Auto-connect
+	sendCommand(F("set wlan join 0"));
+	
+	// Disable Authentication for AdHoc Mode
+	sendCommand(F("set wlan auth 0"));
+	
+	// Enable Auto IP assignment, This allows the WiFly to automatically
+	// assign the IP addresses
+	sendCommand(F("set ip d 2"));
+}
+
+//
+// TODO: Revaluate if this method is actually required. Perhaps the Join method can
+// do all of this, and use a internal Private variable to provide all the required parameters
+// 
+boolean WiFlyDevice::createAdHocNetwork(const char *ssid)
+{	
+  /*
+    Create and AdHoc network with the WiFly Shield.
+   */
+
+  DEBUG_LOG(1, "Entered WiFlyDevice::beginAdhoc()");
+
+  reboot(); // Reboot to get device into known state
+  
+  enterCommandMode();
+
+  // Turn on Adhoc Mode
+  sendCommand(F("set wlan join 4"));
+  // Set SSID of Adhoc Network
+  sendCommand(F("set wlan ssid "),true);
+  sendCommand(ssid);
+  // Set Channel for Adhoc Network
+  sendCommand(F("set wlan chan 1"));
+  // Set IP for Adhoc Network
+  sendCommand(F("set ip address 169.254.1.1"));
+  sendCommand(F("set ip netmask 255.255.0.0"));
+  // Turn off DHCP
+  sendCommand(F("set ip dhcp 0"));
+  // Set server port
+  sendCommand(F("set ip localport "), true);
+  uart->print(serverPort);
+  sendCommand("");
+
+  // Turn off remote connect message
+  sendCommand(F("set comm remote 0"));
+
+  sendCommand(F("save"), false, "Storing in config");
+  //Ensures sucessful reboot. See requireFlowControl for more info.
+  sendCommand(F("get uart"), false, "Flow=0x1");
+  reboot();
+  
+  //After rebooting, your AdHoc network will be available.
+}
 
 boolean WiFlyDevice::join(const char *ssid) {
   /*
@@ -415,7 +519,7 @@ boolean WiFlyDevice::join(const char *ssid) {
   //       not required? (Probably not necessary as I think module
   //       ignores them when they're not required.)
 
-  sendCommand("join ", true);
+  sendCommand(F("join "), true);
   // TODO: Actually detect failure to associate
   // TODO: Handle connecting to Adhoc device
   if (sendCommand(ssid, false, "Associated!")) {
@@ -436,12 +540,12 @@ boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
   // TODO: Handle escaping spaces/$ in passphrase and SSID
 
   // TODO: Do this better...
-  sendCommand("set wlan ", true);
+  sendCommand(F("set wlan "), true);
 
   if (isWPA) {
-    sendCommand("passphrase ", true);
+    sendCommand(F("passphrase "), true);
   } else {
-    sendCommand("key ", true);
+    sendCommand(F("key "), true);
   }
 
   sendCommand(passphrase);
@@ -467,7 +571,7 @@ const char * WiFlyDevice::ip() {
 
   // Version 2.19 of the WiFly firmware has a "get ip a" command but
   // we can't use it because we want to work with 2.18 too.
-  sendCommand("get ip", false, "IP=");
+  sendCommand(F("get ip"), false, "IP=");
 
   char newChar;
   byte offset = 0;
@@ -538,6 +642,52 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
   }
   return true;
 }
+
+
+#define TIME_SIZE 11 // 1311006129
+
+long WiFlyDevice::getTime(){
+
+	/*
+	Returns the time based on the NTP settings and time zone.
+	*/
+
+	char newChar;
+	byte offset = 0;
+	char buffer[TIME_SIZE+1];
+
+	enterCommandMode();
+
+	//sendCommand("time"); // force update if it's not already updated with NTP server
+	sendCommand(F("show t t"), false, "RTC=");
+
+	// copy the time from the response into our buffer
+	while (offset < TIME_SIZE) {
+			newChar = uart->read();
+
+			if (newChar != -1) {
+				buffer[offset++] = newChar;
+			}
+	}
+	buffer[offset]=0;
+  // This should skip the remainder of the output.
+  // TODO: Handle this better?
+  waitForResponse("<");
+  while (uart->read() != ' ') {
+    // Skip the prompt
+  }
+
+  // For some reason the "sendCommand" approach leaves the system
+  // in a state where it misses the first/next connection so for
+  // now we don't check the response.
+  // TODO: Fix this
+  uart->println(F("exit"));
+  //sendCommand(F("exit"), false, "EXIT");
+
+
+  return strtol(buffer, NULL, 0);
+}
+
 
 
 // Preinstantiate required objects

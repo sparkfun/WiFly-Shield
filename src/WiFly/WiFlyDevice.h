@@ -11,12 +11,16 @@ class WiFlyDevice {
 
     void setUart(Stream* newUart);
     void begin();
+    void begin(boolean adhocMode);
+	boolean createAdHocNetwork(const char *ssid);
 
     boolean join(const char *ssid);
     boolean join(const char *ssid, const char *passphrase, 
                  boolean isWPA = true);
 
     boolean configure(byte option, unsigned long value);
+
+	long getTime();
 
     const char * ip();
     
@@ -50,8 +54,12 @@ class WiFlyDevice {
     void switchToCommandMode();
     void reboot();
     void requireFlowControl();
-    void setConfiguration();
+    void setConfiguration(boolean adhocMode);
+	void setAdhocParams();
     boolean sendCommand(const char *command,
+                        boolean isMultipartCommand, // Has default value
+                        const char *expectedResponse); // Has default value
+    boolean sendCommand(const __FlashStringHelper *command,
                         boolean isMultipartCommand, // Has default value
                         const char *expectedResponse); // Has default value
     void waitForResponse(const char *toMatch);
@@ -63,8 +71,8 @@ class WiFlyDevice {
     boolean softwareReboot(boolean isAfterBoot);
     boolean hardwareReboot();
 
-    friend class Client;
-    friend class Server;
+    friend class WiFlyClient;
+    friend class WiFlyServer;
 };
 
 #endif

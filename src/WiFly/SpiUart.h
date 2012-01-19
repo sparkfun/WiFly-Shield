@@ -59,13 +59,10 @@ class SpiUartDevice : public SpiDevice, public Stream {
     void begin(unsigned long baudrate = BAUD_RATE_DEFAULT);
     int available();
     int read();
-    void write(byte value);
-    void write(const char *str);
-#if ENABLE_BULK_TRANSFERS
-    void write(const uint8_t *buffer, size_t size);
-#else
+    size_t write(byte value);
+    size_t write(const char *str, size_t size);
     using Print::write;
-#endif
+
     void flush();
 
 //required for Stream
