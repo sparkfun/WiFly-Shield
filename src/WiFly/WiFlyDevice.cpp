@@ -7,7 +7,7 @@
 
 
 boolean WiFlyDevice::findInResponse(const char *toMatch,
-                                    unsigned int timeOut = 0) {
+                                    unsigned int timeOut = 1000) {
   /*
 
    */
@@ -73,11 +73,17 @@ boolean WiFlyDevice::responseMatched(const char *toMatch) {
   /*
    */
   boolean matchFound = true;
+  unsigned long timeout;
 
 DEBUG_LOG(3, "Entered responseMatched");
   for (unsigned int offset = 0; offset < strlen(toMatch); offset++) {
+    timeout = millis();
     while (!uart->available()) {
-      // Wait -- no timeout
+      // Wait, with optional time out.
+      if (millis() - timeout > 5000) {
+          return false;
+        }
+      delay(1); // This seems to improve reliability slightly
     }
 DEBUG_LOG(3,(char)uart->peek());
     if (uart->read() != toMatch[offset]) {
@@ -177,9 +183,8 @@ void WiFlyDevice::waitForResponse(const char *toMatch) {
   /*
    */
    // Note: Never exits if the correct response is never found
-   while(!responseMatched(toMatch)) {
-     skipRemainderOfResponse();
-   }
+   findInResponse(toMatch);
+ 
 }
 
 
@@ -673,9 +678,7 @@ long WiFlyDevice::getTime(){
   // This should skip the remainder of the output.
   // TODO: Handle this better?
   waitForResponse("<");
-  while (uart->read() != ' ') {
-    // Skip the prompt
-  }
+  findInResponse(" ");
 
   // For some reason the "sendCommand" approach leaves the system
   // in a state where it misses the first/next connection so for
