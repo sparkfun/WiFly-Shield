@@ -24,7 +24,7 @@ const char delimiters[] = "/";
 
 // set up a new x10 instance:
 x10 myHouse =  x10(zcPin, dataPin);
-Server server(80);
+WiFlyServer server(80);
 
 void setup() {
   Serial.begin(9600);
@@ -47,7 +47,7 @@ void setup() {
 #define MAX_COMMAND_LENGTH 50
 
 void loop() {
-  Client client = server.available();
+  WiFlyClient client = server.available();
   if (client) {
 
     Serial.print("Client Found...\n");

@@ -8,44 +8,44 @@
 
 #include "WiFly.h"
 
-// Wifly RN-XV (XBee shaped) module connected
-//  WiFly Tx to pin 0 (Arduino Rx)
-//  WiFly Rx to pin 1 (Arduino Tx)
-
 // using NewSoftSerial V11 beta
 // downloaded from here http://arduiniana.org/2011/01/newsoftserial-11-beta/
 // this will be included as Software Serial in Arduino IDE 1.0
 #include <SoftwareSerial.h>
 
+// Wifly RN-XV (XBee shaped) module connected
+//  WiFly Tx to pin 2 (SoftSerial Rx)
+//  WiFly Rx to pin 3 (SoftSerial Tx)
 SoftwareSerial mySerial(2, 3);
+
 
 // Edit credentials.h to provide your own credentials
 #include "Credentials.h"
 
 // Using Pachube API V2
-Client client("api.pachube.com", 80);
+WiFlyClient client("api.pachube.com", 80);
 
 void setup() {
   
-  pinMode(8,OUTPUT);    // power up the XBee socket
+  pinMode(8,OUTPUT);
   digitalWrite(8,HIGH);
   // lots of time for the WiFly to start up and also in case I need to stop the transmit
   delay(10000);
   
-  Serial.begin(9600);
-  mySerial.begin(9600);
+  Serial.begin(115200);  // nice and fast
+  mySerial.begin(9600);  // default WiFly baud rate - good enough for this
+
+  WiFly.setUart(&mySerial); // Tell the WiFly library that we are not using the SPIUart
   
-  WiFly.setUart(&Serial); // Tell the WiFly library that we are not using the SPIUart
-  
-  mySerial.println("Wifly begin");
+  Serial.println("Wifly begin");
   
   WiFly.begin();    // startup the WiFly
   
-  mySerial.println("Wifly join");
+  Serial.println("Wifly join");
   
   // Join the WiFi network
   if (!WiFly.join(ssid, passphrase, WEP_MODE)) {
-    mySerial.println("Association failed.");
+    Serial.println("Association failed.");
     while (1) {
       // Hang on failure.
     }
@@ -67,9 +67,9 @@ void loop() {
     // multiple lines each with <datastreamID>,<datastreamValue>
     // feedID can be the datastream name of the numberic ID
     sprintf(buff,"0,%d\n1,%d",i++,analogRead(0));
-    mySerial.println("connecting...");
+    Serial.println("connecting...");
     if (client.connect()) {
-      mySerial.println("connected");
+      Serial.println("connected");
       client.print("PUT /v2/feeds/");  // APIV2
       client.print(PACHUBEFEED);
       client.println(".csv HTTP/1.1");
@@ -87,20 +87,20 @@ void loop() {
       client.println();
   
     } else {
-      mySerial.println("connection failed");
+      Serial.println("connection failed");
     }
 
     delay(2000);
     while (client.available()) {
       // TODO verify success (HTTP/1.1 200 OK)
-      mySerial.write(client.read());  // display the result
+      Serial.write(client.read());  // display the result
     }
-    mySerial.println();
+    Serial.println();
    
     if (client.connected()) {
-      mySerial.println("disconnecting.");
+      Serial.println("disconnecting.");
       client.stop();
-      mySerial.println("disconnected.");
+      Serial.println("disconnected.");
     }
   }
 }

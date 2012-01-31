@@ -23,7 +23,7 @@ SoftwareSerial mySerial( 5, 4);		// used to access the XRF
 
 char ssid[] = "XVAdHoc";
 
-Server server(80);
+WiFlyServer server(80);
 
 void setup() {
 
@@ -56,7 +56,7 @@ void loop() {
   //
   // Code from the WiFly Server Example
   //
-  Client client = server.available();
+  WiFlyClient client = server.available();
   if (client) {
     // an http request ends with a blank line
     boolean current_line_is_blank = true;

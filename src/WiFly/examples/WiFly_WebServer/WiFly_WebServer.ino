@@ -10,7 +10,7 @@
 #include "Credentials.h"
 
 
-Server server(80);
+WiFlyServer server(80);
 
 void setup() {
   WiFly.begin();
@@ -29,7 +29,7 @@ void setup() {
 }
 
 void loop() {
-  Client client = server.available();
+  WiFlyClient client = server.available();
   if (client) {
     // an http request ends with a blank line
     boolean current_line_is_blank = true;
