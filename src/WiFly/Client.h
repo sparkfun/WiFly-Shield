@@ -18,9 +18,15 @@ class Client : public Print {
 
   boolean connect();
 
+#if ARDUINO >= 100
+  size_t write(byte value);
+  size_t write(const char *str);
+  size_t write(const uint8_t *buffer, size_t size);
+#else
   void write(byte value);
   void write(const char *str);
   void write(const uint8_t *buffer, size_t size);
+#endif
 
   int available();
   int read();

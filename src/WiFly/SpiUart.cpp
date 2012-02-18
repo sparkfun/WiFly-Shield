@@ -157,7 +157,7 @@ byte SpiUartDevice::readRegister(byte registerAddress) {
 
 byte SpiUartDevice::available() {
   /*
-  
+   
     Get the number of bytes (characters) available for reading.
 
     This is data that's already arrived and stored in the receive
@@ -166,8 +166,9 @@ byte SpiUartDevice::available() {
    */
   // This alternative just checks if there's data but doesn't
   // return how many characters are in the buffer:
-  //    readRegister(LSR) & 0x01
-  return readRegister(RXLVL);
+  // readRegister(LSR) & 0x01
+  delay(2);
+  return (readRegister(RXLVL));
 }
 
 
@@ -188,8 +189,11 @@ int SpiUartDevice::read() {
   return readRegister(RHR);
 }
 
-
+#if ARDUINO >= 100
+size_t SpiUartDevice::write(byte value) {
+#else
 void SpiUartDevice::write(byte value) {
+#endif
   /*
   
     Write byte to UART.
@@ -198,11 +202,17 @@ void SpiUartDevice::write(byte value) {
   while (readRegister(TXLVL) == 0) {
     // Wait for space in TX buffer
   };
-  writeRegister(THR, value); 
+  writeRegister(THR, value);
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
-
+#if ARDUINO >= 100
+size_t SpiUartDevice::write(const char *str) {
+#else
 void SpiUartDevice::write(const char *str) {
+#endif
   /*
   
     Write string to UART.
@@ -213,10 +223,17 @@ void SpiUartDevice::write(const char *str) {
     // Wait for empty TX buffer (slow)
     // (But apparently still not slow enough to ensure delivery.)
   };
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
 #if ENABLE_BULK_TRANSFERS
+#if ARDUINO >= 100
+size_t SpiUartDevice::write(const uint8_t *buffer, size_t size) {
+#else
 void SpiUartDevice::write(const uint8_t *buffer, size_t size) {
+#endif
   /*
   
     Write buffer to UART.
@@ -233,6 +250,9 @@ void SpiUartDevice::write(const uint8_t *buffer, size_t size) {
   transfer_bulk(buffer, size);
 
   deselect();
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 #endif
 

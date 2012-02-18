@@ -59,6 +59,15 @@ class SpiUartDevice : public SpiDevice, public Print {
     void begin(unsigned long baudrate = BAUD_RATE_DEFAULT);
     byte available();
     int read();
+#if ARDUINO >= 100
+    size_t write(byte value);
+    size_t write(const char *str);
+#if ENABLE_BULK_TRANSFERS
+    size_t write(const uint8_t *buffer, size_t size);
+#else
+    using Print::write;
+#endif
+#else
     void write(byte value);
     void write(const char *str);
 #if ENABLE_BULK_TRANSFERS
@@ -66,7 +75,8 @@ class SpiUartDevice : public SpiDevice, public Print {
 #else
     using Print::write;
 #endif
-    void flush();
+#endif
+	void flush();
 
     // These are specific to the SPI UART
     void ioSetDirection(unsigned char bits);

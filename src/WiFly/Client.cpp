@@ -35,25 +35,43 @@ Client::Client(const char* domain, uint16_t port) :
   isOpen = false;
 }
 
-
+#if ARDUINO >= 100
+size_t Client::write(byte value) {
+#else
 void Client::write(byte value) {
+#endif
   /*
    */
   _WiFly.uart.write(value);
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
-
+#if ARDUINO >= 100
+size_t Client::write(const char *str) {
+#else
 void Client::write(const char *str) {
+#endif
   /*
    */
   _WiFly.uart.write(str);
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
-
+#if ARDUINO >= 100
+size_t Client::write(const uint8_t *buffer, size_t size) {
+#else
 void Client::write(const uint8_t *buffer, size_t size) {
+#endif
   /*
    */
   _WiFly.uart.write(buffer, size);
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
 
