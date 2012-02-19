@@ -32,7 +32,7 @@ restarted the Arduino IDE.
 You can also manually add the library by adding the following to the top
 of your sketch.
 
-```c++
+```c
 #include <_Spi.h>
 #include <Configuration.h>
 #include <Debug.h>
@@ -49,8 +49,16 @@ of your sketch.
 This is how you connect to a WPA wireless network with a passphrase
 and use DHCP to obtain an IP address and DNS configuration:
 
-----
-#include "WiFly.h"
+```c
+#include <_Spi.h>
+#include <Configuration.h>
+#include <Debug.h>
+#include <ParsedStream.h>
+#include <SpiUart.h>
+#include <WiFly.h>
+#include <WiFlyClient.h>
+#include <WiFlyDevice.h>
+#include <WiFlyServer.h>
 
 void setup() {
 
@@ -62,7 +70,7 @@ void setup() {
   
   // Rejoice in your connection
 }
----
+```
 
 If the network you want to connect to has no passphrase you can use this form:
 
