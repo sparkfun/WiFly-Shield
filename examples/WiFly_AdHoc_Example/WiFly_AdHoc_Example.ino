@@ -15,7 +15,15 @@
  * Further changes here made by Chris Theberge to demo AdHoc mode.
  */
 
+#include <_Spi.h>
+#include <Configuration.h>
+#include <Debug.h>
+#include <ParsedStream.h>
+#include <SpiUart.h>
 #include <WiFly.h>
+#include <WiFlyClient.h>
+#include <WiFlyDevice.h>
+#include <WiFlyServer.h>
 #include <SoftwareSerial.h>
 
 SoftwareSerial mySerial( 5, 4);		// used to access the XRF

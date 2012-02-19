@@ -13,8 +13,15 @@
  * http://www.sparkfun.com
  */
 
-#include "WiFly.h"
-
+#include <_Spi.h>
+#include <Configuration.h>
+#include <Debug.h>
+#include <ParsedStream.h>
+#include <SpiUart.h>
+#include <WiFly.h>
+#include <WiFlyClient.h>
+#include <WiFlyDevice.h>
+#include <WiFlyServer.h>
 
 #include "Credentials.h"
 
