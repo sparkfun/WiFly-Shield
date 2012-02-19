@@ -1,25 +1,50 @@
-== SparkFun WiFly Shield Library : alpha 1 release ==
+# SparkFun WiFly Shield Library : alpha 2 release
 
-This is a library for the Arduino-compatible WiFly Shield available from
-SparkFun Electronics:
+This is a library for the Arduino-compatible [WiFly Shield](http://sparkfun.com/products/9954) available from SparkFun Electronics. The library also provides a high-level interface for the [SC16IS750 I2C/SPI-to-UART IC](http://www.sparkfun.com/products/9981) used in the WiFly shield but also available on a separate breakout board.
 
-  <http://sparkfun.com/products/9954> 
+The goal with this library is to make it--as much as possible--a "drop in" replacement for the official [Arduino Ethernet library](http://www.arduino.cc/en/Reference/Ethernet). Once a wireless network is joined the library should respond in the same way as the Ethernet library. This means you should be able to take existing Ethernet examples and make them work wirelessly without too many changes.
 
-The goal with this library is to make it--as much as possible--a "drop
-in" replacement for the official Arduino Ethernet library
-<http://www.arduino.cc/en/Reference/Ethernet>. Once a wireless network
-is joined the library should respond in the same way as the Ethernet
-library. This means you should be able to take existing Ethernet
-examples and make them work wirelessly without too many changes.
+# Installation
+A good resource to start is the [Arduino Hacking Libraries](http://www.arduino.cc/en/Hacking/Libraries) article which goes in depth about how to install libraries. There are two ways to install this library, it can either be directly downloaded and unzipped or it can be cloned using Git.
 
-The library also provides a high-level interface for the "SC16IS750
-I2C/SPI-to-UART IC" used in the WiFly shield but also available on a
-separate breakout board:
+*Step 1: Check the libraries directory*
+For both methods, you'll need to check that you have a shared library
+directory. It should be under the Arduino home (e.g. in OSX, it will probably be `~/Documents/Arduino/libraries`).
+If the `libraries` directory doesn't already exist, you'll need to create it.
 
-   <http://www.sparkfun.com/products/9981>
+*Step 2a: Add the library via Git*
+Use Git to clone this project into the `libraries` directory. If you've
+never used Git before, check out the [Git Community Book](http://book.git-scm.com/).
 
+*Step 2b: Add the library via Archived File*
+Download and unzip the zip file from this GitHub project and put the
+contents in the `libraries` directory.
 
-= Usage =
+At the end of Step 2, you should have a copy of this project at
+`~/Documents/Arduino/libraries/WiFly`
+
+*Step 3: Include the library in your project*
+Restart the Arduino IDE if you're using it. Under the `Sketch` menu, you
+should see a `WiFly` item in the `Import Library ...` option. If you
+don't, recheck that the library is in the right location and that you've
+restarted the Arduino IDE.
+
+You can also manually add the library by adding the following to the top
+of your sketch.
+
+```c++
+#include <_Spi.h>
+#include <Configuration.h>
+#include <Debug.h>
+#include <ParsedStream.h>
+#include <SpiUart.h>
+#include <WiFly.h>
+#include <WiFlyClient.h>
+#include <WiFlyDevice.h>
+#include <WiFlyServer.h>
+```
+
+# Usage
 
 This is how you connect to a WPA wireless network with a passphrase
 and use DHCP to obtain an IP address and DNS configuration:
