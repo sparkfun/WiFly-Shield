@@ -190,14 +190,23 @@ There are some known issues:
  * Passphrases or SSIDs that contain spaces or dollar signs ($) will
    probably not work.
 
-# License & Authors
+# License
 
-# Feedback
+The SparkFun WiFly Shield library is Copyright (c) 2010 by SparkFun
+Electronics and is licensed under the LGPL.
 
-Please email <spark@sparkfun.com> or leave a comment on the SparkFun forums:
+Examples based on the original examples from the official Arduino
+Ethernet library are licensed under the same terms as the originals.
 
-  <http://forum.sparkfun.com/>
+'ParsedStream.h' contains a ringbuffer implementation based on one
+originally found in the Arduino 'HardwareSerial' implementation.
 
+# Authors
+
+ * Chris Taylor (Original autoconnect sketch and tutorial)
+ * Philip J. Lindsay (Conversion to library)
+ * John Crouchley (1.0 updates -- see https://github.com/jcrouchley/WiFly-Shield)
+ * Bob Breznak (see https://github.com/bobbrez/WiFly-Shield for updates)
 
 # Changelog
 
