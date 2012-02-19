@@ -7,23 +7,23 @@ The goal with this library is to make it--as much as possible--a "drop in" repla
 # Installation
 A good resource to start is the [Arduino Hacking Libraries](http://www.arduino.cc/en/Hacking/Libraries) article which goes in depth about how to install libraries. There are two ways to install this library, it can either be directly downloaded and unzipped or it can be cloned using Git.
 
-*Step 1: Check the libraries directory*
+## Step 1: Check the libraries directory
 For both methods, you'll need to check that you have a shared library
 directory. It should be under the Arduino home (e.g. in OSX, it will probably be `~/Documents/Arduino/libraries`).
 If the `libraries` directory doesn't already exist, you'll need to create it.
 
-*Step 2a: Add the library via Git*
+## Step 2a: Add the library via Git
 Use Git to clone this project into the `libraries` directory. If you've
 never used Git before, check out the [Git Community Book](http://book.git-scm.com/).
 
-*Step 2b: Add the library via Archived File*
+## Step 2b: Add the library via Archived File
 Download and unzip the zip file from this GitHub project and put the
 contents in the `libraries` directory.
 
 At the end of Step 2, you should have a copy of this project at
 `~/Documents/Arduino/libraries/WiFly`
 
-*Step 3: Include the library in your project*
+##Step 3: Include the library in your project
 Restart the Arduino IDE if you're using it. Under the `Sketch` menu, you
 should see a `WiFly` item in the `Import Library ...` option. If you
 don't, recheck that the library is in the right location and that you've
