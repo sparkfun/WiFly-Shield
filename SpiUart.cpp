@@ -1,5 +1,6 @@
 
 #include "SpiUart.h"
+#include <SPI.h>
 
 // See section 8.10 of the datasheet for definitions
 // of bits in the Enhanced Features Register (EFR)
@@ -51,10 +52,38 @@ struct SPI_UART_cfg SPI_Uart_config = {
 
 
 void SpiUartDevice::begin(unsigned long baudrate /* default value */) {
+  pinMode(MOSI, OUTPUT);
+  pinMode(SCK, OUTPUT);
+  pinMode(SS, OUTPUT);
+  deselect();
+
   /*
-        
+  
+    Initialise SPI system.
+  
    */
-  SpiDevice::begin();
+
+  // From Table 18-5 in ATmega 48/88/168 datasheet:
+  //
+  // SPI2X | SPR1 | SPR0 | SCK Frequency 
+  //   1   |  0   |  0   |   f_osc/2 
+  //
+  // Where f_osc is the Oscillator Clock frequency 
+  //
+  // This is the highest SPI clock frequency supported.
+
+  SPCR = (1<<SPE)|(1<<MSTR)|(0<<SPR1)|(0<<SPR0);
+  SPSR = SPSR | (1 << SPI2X);
+
+#if 0
+  // This approach is not specified in the datasheet so I'm trying without.
+  char clr = 0;
+  
+  clr=SPSR;
+  clr=SPDR;
+  delay(10); 
+#endif
+
   initUart(baudrate);
 }
 

@@ -14,16 +14,7 @@ void SpiDevice::begin() {
     the SS define in the header.
     
    */
-  begin(SS);
-}
-
-
-void SpiDevice::begin(byte selectPin) {
-  /*
-   */
-  _selectPin = selectPin;      
   _initPins();
-  _initSpi();
 }
 
 
@@ -33,17 +24,11 @@ void SpiDevice::_initPins() {
     Initialise the pins used for SPI communication.
   
    */
-  
   pinMode(MOSI, OUTPUT);
-  pinMode(MISO, INPUT);
   pinMode(SCK, OUTPUT);
-  pinMode(_selectPin, OUTPUT);
-  
+  pinMode(SS, OUTPUT);
   deselect();
-}
 
-
-void SpiDevice::_initSpi() {
   /*
   
     Initialise SPI system.
@@ -80,7 +65,7 @@ void SpiDevice::deselect() {
     Deselect the SPI device.
     
   */
-  digitalWrite(_selectPin, HIGH);
+  digitalWrite(SS, HIGH);
 }
 
 
@@ -90,7 +75,7 @@ void SpiDevice::select() {
     Select the SPI device.
     
   */
-  digitalWrite(_selectPin, LOW);
+  digitalWrite(SS, LOW);
 }
 
 
