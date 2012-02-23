@@ -14,17 +14,6 @@
 
 #include "_Spi.h"
 
-// Until we implement a bulk transfer method that takes into account
-// the available space in the transmit buffer we will disable bulk transfers.
-// The present method of bulk transfers risks overflowing the SPI UART
-// transmit buffer.
-// Disabling the transfers means we use the standard byte-at-time routine
-// from the Print class.
-// This isn't a big issue at 9600 baud at least because sending things
-// a byte at a time doesn't slow us down noticeably.
-// TODO: Implement better bulk transfer method
-#define ENABLE_BULK_TRANSFERS 0
-
 // SC16IS750 Register definitions
 // TODO: Don't bit shift these here, do it in the read/write register routines
 #define THR        0x00 << 3

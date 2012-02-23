@@ -20,7 +20,6 @@ class SpiDevice {
     SpiDevice();
 
     byte transfer(volatile byte data);
-    void transfer_bulk(const uint8_t* srcptr, unsigned long int length);
 };
 
 #endif
