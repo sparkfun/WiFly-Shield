@@ -96,6 +96,20 @@ void SpiUartDevice::select() {
   digitalWrite(SS, LOW);
 }
 
+byte SpiUartDevice::transfer(volatile byte data) {
+  /*
+
+    Transfer byte to SPI device and return
+    the byte retrieved.
+
+   */  
+  SPDR = data; // Start the transmission
+  while (!(SPSR & (1<<SPIF))) {
+    // Wait for the end of the transmission
+  };
+  return SPDR;  // Return the received byte
+}
+
 void SpiUartDevice::initUart(unsigned long baudrate) {
   /*
     
@@ -252,27 +266,6 @@ size_t SpiUartDevice::write(const char *str, size_t size) {
 		// (But apparently still not slow enough to ensure delivery.)
 	};
 }
-
-#if ENABLE_BULK_TRANSFERS
-void SpiUartDevice::write(const uint8_t *buffer, size_t size) {
-  /*
-  
-    Write buffer to UART.
- 
-   */
-  select();
-  transfer(THR); // TODO: Change this when we modify register addresses? (Even though it's 0x00.) 
-
-  while(size > 16) {
-    transfer_bulk(buffer, 16);
-    size -= 16;
-    buffer += 16;
-  }
-  transfer_bulk(buffer, size);
-
-  deselect();
-}
-#endif
 
 void SpiUartDevice::flush() {
   /*

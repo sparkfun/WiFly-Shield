@@ -12,8 +12,6 @@
 
 #include "Configuration.h"
 
-#include "_Spi.h"
-
 // SC16IS750 Register definitions
 // TODO: Don't bit shift these here, do it in the read/write register routines
 #define THR        0x00 << 3
@@ -50,7 +48,7 @@
 #define BAUD_RATE_DEFAULT 9600 // WiFly default baudrate
 
 
-class SpiUartDevice : public SpiDevice, public Stream {
+class SpiUartDevice : public Stream {
   
   public:
     void begin(unsigned long baudrate = BAUD_RATE_DEFAULT);
@@ -72,6 +70,7 @@ class SpiUartDevice : public SpiDevice, public Stream {
   private:
     void deselect();
     void select();
+    byte transfer(volatile byte data);
     void writeRegister(byte registerAddress, byte data);
     byte readRegister(byte registerAddress);
     void initUart(unsigned long baudrate);
