@@ -81,6 +81,8 @@ class SpiUartDevice : public SpiDevice, public Stream {
     void ioSetState(unsigned char bits);
   
   private:
+    void deselect();
+    void select();
     void writeRegister(byte registerAddress, byte data);
     byte readRegister(byte registerAddress);
     void initUart(unsigned long baudrate);

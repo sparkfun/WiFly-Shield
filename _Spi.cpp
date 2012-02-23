@@ -7,24 +7,7 @@ SpiDevice::SpiDevice() {
 }
 
 
-void SpiDevice::deselect() {
-  /*
-  
-    Deselect the SPI device.
-    
-  */
-  digitalWrite(SS, HIGH);
-}
 
-
-void SpiDevice::select() {
-  /*
-  
-    Select the SPI device.
-    
-  */
-  digitalWrite(SS, LOW);
-}
 
 
 byte SpiDevice::transfer(volatile byte data) {

@@ -87,6 +87,14 @@ void SpiUartDevice::begin(unsigned long baudrate /* default value */) {
   initUart(baudrate);
 }
 
+void SpiUartDevice::deselect() {
+  digitalWrite(SS, HIGH);
+}
+
+
+void SpiUartDevice::select() {
+  digitalWrite(SS, LOW);
+}
 
 void SpiUartDevice::initUart(unsigned long baudrate) {
   /*

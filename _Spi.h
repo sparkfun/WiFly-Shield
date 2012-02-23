@@ -19,9 +19,6 @@ class SpiDevice {
   public:
     SpiDevice();
 
-    void deselect();
-    void select();
-
     byte transfer(volatile byte data);
     void transfer_bulk(const uint8_t* srcptr, unsigned long int length);
 };
