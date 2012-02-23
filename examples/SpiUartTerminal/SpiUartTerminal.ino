@@ -9,15 +9,8 @@
 
  */
 
-#include <_Spi.h>
-#include <Configuration.h>
-#include <Debug.h>
-#include <ParsedStream.h>
-#include <SpiUart.h>
+#include <SPI.h>
 #include <WiFly.h>
-#include <WiFlyClient.h>
-#include <WiFlyDevice.h>
-#include <WiFlyServer.h>
 
 void setup() {
 

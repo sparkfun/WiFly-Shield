@@ -6,15 +6,8 @@
  * A simple web server that shows the value of the analog input pins.
  */
 
-#include <_Spi.h>
-#include <Configuration.h>
-#include <Debug.h>
-#include <ParsedStream.h>
-#include <SpiUart.h>
+#include <SPI.h>
 #include <WiFly.h>
-#include <WiFlyClient.h>
-#include <WiFlyDevice.h>
-#include <WiFlyServer.h>
 
 #include "Credentials.h"
 
