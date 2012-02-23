@@ -6,7 +6,8 @@
 // https://github.com/jcrouchley/WiFly-Shield
 // Built using Arduino IDE V0.22
 
-#include "WiFly.h"
+#include <SPI.h>
+#include <WiFly.h>
 
 // Wifly RN-XV (XBee shaped) module connected
 //  WiFly Tx to pin 0 (Arduino Rx)

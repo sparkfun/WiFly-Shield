@@ -22,7 +22,8 @@
 
  */
 
-#include "WiFly.h" // We use this for the preinstantiated SpiSerial object.
+#include <SPI.h>
+#include <WiFly.h>
 
 // The GPIO pins on the SPI UART that are connected to WiFly module pins
 #define BIT_PIO9  0b00000001 // Hardware factory reset + auto-adhoc

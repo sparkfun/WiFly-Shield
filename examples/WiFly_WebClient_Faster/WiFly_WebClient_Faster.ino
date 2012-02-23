@@ -1,8 +1,8 @@
 
 // (Based on Ethernet's WebClient Example)
 
-#include "WiFly.h"
-
+#include <SPI.h>
+#include <WiFly.h>
 
 #include "Credentials.h"
 

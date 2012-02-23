@@ -15,6 +15,7 @@
  * Further changes here made by Chris Theberge to demo AdHoc mode.
  */
 
+#include <SPI.h>
 #include <WiFly.h>
 #include <SoftwareSerial.h>
 

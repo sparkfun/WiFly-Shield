@@ -11,11 +11,12 @@
  */
 #include <X10.h>
 #include <x10constants.h>
-
+#include <SPI.h>
 #include <WiFly.h>
-#include "Credentials.h"
 #include <string.h>
 #include <stddef.h>
+
+#include "Credentials.h"
 
 #define zcPin 2
 #define dataPin 3

@@ -6,9 +6,10 @@
  * A simple web server that shows the value of the analog input pins.
  */
 
-#include "WiFly.h"
-#include "Credentials.h"
+#include <SPI.h>
+#include <WiFly.h>
 
+#include "Credentials.h"
 
 WiFlyServer server(80);
 

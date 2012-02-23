@@ -1,4 +1,3 @@
-
 #include "SpiUart.h"
 
 // See section 8.10 of the datasheet for definitions
@@ -50,39 +49,56 @@ struct SPI_UART_cfg SPI_Uart_config = {
 };
 
 
-void SpiUartDevice::begin(unsigned long baudrate /* default value */) {
+void SpiUartDevice::begin(unsigned long baudrate) {
   /*
-        
+   * Initialize SPI and UART communications
+   *
+   * Uses BAUD_RATE_DEFAULT as baudrate if none is given
    */
-  SpiDevice::begin();
+
+  SPI.begin();
   initUart(baudrate);
+}
+
+void SpiUartDevice::deselect() {
+  /*
+   * Deslects the SPI device
+   */
+
+  digitalWrite(SS, HIGH);
+}
+
+
+void SpiUartDevice::select() {
+  /*
+   * Selects the SPI device
+   */
+
+  digitalWrite(SS, LOW);
 }
 
 
 void SpiUartDevice::initUart(unsigned long baudrate) {
   /*
-    
-    Initialise the UART.
-    
-    If initialisation fails this method does not return.
-        
+   * Initialise the UART.
+   *
+   * If initialisation fails this method does not return.
    */
+
   // Initialise and test SC16IS750
   configureUart(baudrate);
-  
+
   if(!uartConnected()){ 
     while(1) {
       // Lock up if we fail to initialise SPI UART bridge.
-    }; 
+    };
   }
-  
+
   // The SPI UART bridge is now successfully initialised.
 }
 
 
 void SpiUartDevice::setBaudRate(unsigned long baudrate) {
-  /*
-   */
   unsigned long divisor = BAUD_RATE_DIVISOR(baudrate);
 
   writeRegister(LCR, LCR_ENABLE_DIVISOR_LATCH); // "Program baudrate"
@@ -93,10 +109,9 @@ void SpiUartDevice::setBaudRate(unsigned long baudrate) {
 
 void SpiUartDevice::configureUart(unsigned long baudrate) {
   /*
-  
-     Configure the settings of the UART.
-  
+   * Configure the settings of the UART.
    */
+
   // TODO: Improve with use of constants and calculations.
   setBaudRate(baudrate);
 
@@ -110,13 +125,12 @@ void SpiUartDevice::configureUart(unsigned long baudrate) {
 
 boolean SpiUartDevice::uartConnected() {
   /*
-  
-     Check that UART is connected and operational.
-  
+   * Check that UART is connected and operational.
    */
+
   // Perform read/write test to check if UART is working
   const char TEST_CHARACTER = 'H';
-  
+
   writeRegister(SPR, TEST_CHARACTER);
 
   return (readRegister(SPR) == TEST_CHARACTER);
@@ -124,32 +138,30 @@ boolean SpiUartDevice::uartConnected() {
 
 
 void SpiUartDevice::writeRegister(byte registerAddress, byte data) {
-  /*
+   /*
+    * Write <data> byte to the SC16IS750 register <registerAddress>
+    */
 
-    Write <data> byte to the SC16IS750 register <registerAddress>.
-
-   */
   select();
-  transfer(registerAddress);
-  transfer(data);
+  SPI.transfer(registerAddress);
+  SPI.transfer(data);
   deselect();
 }
 
 
 byte SpiUartDevice::readRegister(byte registerAddress) {
   /*
-  
-    Read byte from SC16IS750 register at <registerAddress>.
-  
+   * Read byte from SC16IS750 register at <registerAddress>.
    */
+
   // Used in SPI read operations to flush slave's shift register
   const byte SPI_DUMMY_BYTE = 0xFF; 
-  
+
   char result;
 
   select();
-  transfer(SPI_READ_MODE_FLAG | registerAddress);
-  result = transfer(SPI_DUMMY_BYTE);
+  SPI.transfer(SPI_READ_MODE_FLAG | registerAddress);
+  result = SPI.transfer(SPI_DUMMY_BYTE);
   deselect();
   return result;  
 }
@@ -157,13 +169,12 @@ byte SpiUartDevice::readRegister(byte registerAddress) {
 
 int SpiUartDevice::available() {
   /*
-  
-    Get the number of bytes (characters) available for reading.
-
-    This is data that's already arrived and stored in the receive
-    buffer (which holds 64 bytes).
-  
+   * Get the number of bytes (characters) available for reading.
+   *
+   * This is data that's already arrived and stored in the receive
+   * buffer (which holds 64 bytes).
    */
+
   // This alternative just checks if there's data but doesn't
   // return how many characters are in the buffer:
   //    readRegister(LSR) & 0x01
@@ -173,28 +184,26 @@ int SpiUartDevice::available() {
 
 int SpiUartDevice::read() {
   /*
-  
-    Read byte from UART.
-   
-    Returns byte read or or -1 if no data available.
-    
-    Acts in the same manner as 'Serial.read()'.
-  
+   * Read byte from UART.
+   *
+   * Returns byte read or or -1 if no data available.
+   *
+   * Acts in the same manner as 'Serial.read()'.
    */
+
   if (!available()) {
     return -1;
   }
-  
+
   return readRegister(RHR);
 }
 
 
 size_t SpiUartDevice::write(byte value) {
   /*
-  
-    Write byte to UART.
- 
+   * Write byte to UART.
    */
+
   while (readRegister(TXLVL) == 0) {
     // Wait for space in TX buffer
   };
@@ -204,45 +213,22 @@ size_t SpiUartDevice::write(byte value) {
 
 size_t SpiUartDevice::write(const char *str, size_t size) {
   /*
-  
-    Write string to UART.
- 
+   * Write string to UART.
    */
-	while (size--)
-		write(*str++);  
-	while (readRegister(TXLVL) < 64) {
-		// Wait for empty TX buffer (slow)
-		// (But apparently still not slow enough to ensure delivery.)
-	};
+
+  while (size--)
+    write(*str++);
+    while (readRegister(TXLVL) < 64) {
+      // Wait for empty TX buffer (slow)
+      // (But apparently still not slow enough to ensure delivery.)
+    };
 }
-
-#if ENABLE_BULK_TRANSFERS
-void SpiUartDevice::write(const uint8_t *buffer, size_t size) {
-  /*
-  
-    Write buffer to UART.
- 
-   */
-  select();
-  transfer(THR); // TODO: Change this when we modify register addresses? (Even though it's 0x00.) 
-
-  while(size > 16) {
-    transfer_bulk(buffer, 16);
-    size -= 16;
-    buffer += 16;
-  }
-  transfer_bulk(buffer, size);
-
-  deselect();
-}
-#endif
 
 void SpiUartDevice::flush() {
   /*
-  
-    Flush characters from SC16IS750 receive buffer.
-  
+   * Flush characters from SC16IS750 receive buffer.
    */
+
   // Note: This may not be the most appropriate flush approach.
   //       It might be better to just flush the UART's buffer
   //       rather than the buffer of the connected device
@@ -254,14 +240,10 @@ void SpiUartDevice::flush() {
 
 
 void SpiUartDevice::ioSetDirection(unsigned char bits) {
-  /*
-   */
   writeRegister(IODIR, bits);
 }
 
 
 void SpiUartDevice::ioSetState(unsigned char bits) {
-  /*
-   */
   writeRegister(IOSTATE, bits);
 }

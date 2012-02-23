@@ -6,7 +6,8 @@
 // https://github.com/jcrouchley/WiFly-Shield
 // Built using Arduino IDE V0.22
 
-#include "WiFly.h"
+#include <SPI.h>
+#include <WiFly.h>
 
 // using NewSoftSerial V11 beta
 // downloaded from here http://arduiniana.org/2011/01/newsoftserial-11-beta/

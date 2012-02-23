@@ -9,8 +9,8 @@
 
  */
 
-#include "../../WiFly/WiFly.h" // We use this for the preinstantiated SpiSerial object.
-
+#include <SPI.h>
+#include <WiFly.h>
 
 void setup() {
 

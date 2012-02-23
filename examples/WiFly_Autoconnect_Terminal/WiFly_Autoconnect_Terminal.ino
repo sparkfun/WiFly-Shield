@@ -13,8 +13,8 @@
  * http://www.sparkfun.com
  */
 
-#include "WiFly.h"
-
+#include <SPI.h>
+#include <WiFly.h>
 
 #include "Credentials.h"
 
