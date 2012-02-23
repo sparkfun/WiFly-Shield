@@ -8,6 +8,7 @@
 #include <WProgram.h>
 #endif
 
+#include <SPI.h>
 #include <pins_arduino.h>
 
 #include "Configuration.h"
@@ -36,7 +37,7 @@
 #define DLL        0x00 << 3
 #define DLM        0x01 << 3
 #define EFR        0x02 << 3
-#define XON1       0x04 << 3  
+#define XON1       0x04 << 3
 #define XON2       0x05 << 3
 #define XOFF1      0x06 << 3
 #define XOFF2      0x07 << 3
@@ -70,7 +71,6 @@ class SpiUartDevice : public Stream {
   private:
     void deselect();
     void select();
-    byte transfer(volatile byte data);
     void writeRegister(byte registerAddress, byte data);
     byte readRegister(byte registerAddress);
     void initUart(unsigned long baudrate);
