@@ -27,21 +27,14 @@ At the end of Step 2, you should have a copy of this project at
 Restart the Arduino IDE if you're using it. Under the `Sketch` menu, you
 should see a `WiFly` item in the `Import Library ...` option. If you
 don't, recheck that the library is in the right location and that you've
-restarted the Arduino IDE.
+restarted the Arduino IDE. Right now it adds a lot more then needed.
 
 You can also manually add the library by adding the following to the top
 of your sketch.
 
 ```c
-#include <_Spi.h>
-#include <Configuration.h>
-#include <Debug.h>
-#include <ParsedStream.h>
-#include <SpiUart.h>
+#include <SPI.h>
 #include <WiFly.h>
-#include <WiFlyClient.h>
-#include <WiFlyDevice.h>
-#include <WiFlyServer.h>
 ```
 
 # Usage
@@ -50,15 +43,8 @@ This is how you connect to a WPA wireless network with a passphrase
 and use DHCP to obtain an IP address and DNS configuration:
 
 ```c
-#include <_Spi.h>
-#include <Configuration.h>
-#include <Debug.h>
-#include <ParsedStream.h>
-#include <SpiUart.h>
+#include <SPI.h>
 #include <WiFly.h>
-#include <WiFlyClient.h>
-#include <WiFlyDevice.h>
-#include <WiFlyServer.h>
 
 void setup() {
 
