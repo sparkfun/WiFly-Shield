@@ -359,25 +359,6 @@ void WiFlyDevice::requireFlowControl() {
   reboot();
 }
 
-#define ANTENNA_TYPE_INTERNAL 0
-#define ANTENNA_TYPE_EXTERNAL 1
-
-void WiFlyDevice::setAntennaType(unsigned int type) {
-
-  DEBUG_LOG(1, "Entered setAntennaType");
-
-  enterCommandMode();
-
-  // Set antenna type
-  sendCommand("set wlan ext_antenna ", true);
-
-  sendCommand(type);
-
-  sendCommand("save", false, "Storing in config");
-
-  reboot();
-}
-
 void WiFlyDevice::setConfiguration() {
   /*
    */
@@ -539,6 +520,15 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
         return false;
       }
       break;
+	case ANTENNA_TYPE:
+	  enterCommandMode();
+	
+	  sendCommand("set wlan ext_antenna ", true);
+
+	  sendCommand(type);
+
+	  reboot();
+	
     default:
       return false;
       break;
