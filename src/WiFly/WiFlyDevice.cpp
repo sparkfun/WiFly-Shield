@@ -369,7 +369,7 @@ void WiFlyDevice::setAntennaType(unsigned int type) {
   enterCommandMode();
 
   // Set antenna type
-  sendCommand("set wlan ext_antenna ");
+  sendCommand("set wlan ext_antenna ", true);
 
   sendCommand(type);
 
