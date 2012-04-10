@@ -525,7 +525,7 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
 	
 	  sendCommand("set wlan ext_antenna ", true);
 
-	  sendCommand(type);
+	  sendCommand(value);
 
 	  reboot();
 	
