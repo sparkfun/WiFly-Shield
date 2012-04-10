@@ -18,7 +18,7 @@
 
 // Configuration options
 #define WIFLY_BAUD 1
-#define ANTENNA_TYPE 1
+#define ANTENNA_TYPE 2
 
 // TODO: Don't make this extern
 // TODO: How/whether to allow sending of arbitrary data/commands over serial?
