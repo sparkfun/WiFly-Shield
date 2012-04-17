@@ -12,8 +12,13 @@
 #define WEP_MODE false
 #define WPA_MODE true
 
+// Antenna types
+#define INTERNAL_ANTENNA 0
+#define EXTERNAL_ANTENNA 1
+
 // Configuration options
 #define WIFLY_BAUD 1
+#define ANTENNA_TYPE 2
 
 // TODO: Don't make this extern
 // TODO: How/whether to allow sending of arbitrary data/commands over serial?
