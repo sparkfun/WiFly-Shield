@@ -98,13 +98,14 @@ boolean WiFlyClient::connect() {
     
     _WiFly.uart->print(_port, DEC);
     
-    _WiFly.sendCommand("", false, "*OPEN*");
+    //  I guess we can expect the connection to be open if we get *OPEN* back...
+    isOpen = _WiFly.sendCommand("", false, "*OPEN*");
     
     // TODO: Handle connect failure
   }
   
-  isOpen = true;
-  return true;
+  
+  return isOpen;
 }
 
 
