@@ -12,16 +12,17 @@ class WiFlyDevice {
     void setUart(Stream* newUart);
     void begin();
     void begin(boolean adhocMode);
-	boolean createAdHocNetwork(const char *ssid);
+	  boolean createAdHocNetwork(const char *ssid);
 
     boolean join(const char *ssid);
     boolean join(const char *ssid, const char *passphrase, 
                  boolean isWPA = true);
+                 
 
     boolean configure(byte option, unsigned long value);
 
-	long getTime();
-
+	  long getTime();
+    const char * getConnectionStatus();
     const char * ip();
     
   private:

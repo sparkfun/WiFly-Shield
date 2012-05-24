@@ -354,6 +354,30 @@ boolean WiFlyDevice::sendCommand(const char *command,
   return true;
 }
 
+const char * WiFlyDevice::getConnectionStatus()
+{
+  static char status[4]="";
+  char newChar;
+  byte offset = 0;
+  enterCommandMode();
+  
+  if(sendCommand("show c ",false,"8"))
+  {
+    while (offset < 4)
+    {
+      newChar = uart->read();
+      if (newChar != -1) 
+      {
+        status[offset] = newChar;
+        offset++;
+      }
+    }
+    status[3]=0;
+  }
+  uart->println("exit");
+  return status;
+}
+
 
 void WiFlyDevice::requireFlowControl() {
   /*
@@ -542,6 +566,10 @@ boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
                           boolean isWPA) {
   /*
    */
+   // For some reason, join is not working after using sendCommand,
+   // so we have to reboot (begin()) the WiFly so far to allow rejoining to the network.
+   // Quick and dirty!!
+   begin();
   // TODO: Handle escaping spaces/$ in passphrase and SSID
 
   // TODO: Do this better...
