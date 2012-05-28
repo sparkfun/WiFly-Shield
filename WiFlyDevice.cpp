@@ -5,6 +5,8 @@
 
 #include "Debug.h"
 
+#include <string.h>
+
 
 boolean WiFlyDevice::findInResponse(const char *toMatch,
                                     unsigned int timeOut = 1000) {
@@ -591,23 +593,33 @@ boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
    // For some reason, join is not working after using sendCommand,
    // so we have to reboot (begin()) the WiFly so far to allow rejoining to the network.
    // Quick and dirty!!
-   begin();
-  // TODO: Handle escaping spaces/$ in passphrase and SSID
+   //begin();
+   String command="";
+  if (commandModeFlag) {
+		exitCommandMode();
+	}
 
-  // TODO: Do this better...
-  sendCommand(F("set wlan "), true);
+	enterCommandMode();
+  // TODO: Handle escaping spaces/$ in passphrase and SSID
+  command="set wlan ";
 
   if (isWPA) {
-    sendCommand(F("passphrase "), true);
+    command += " passphrase ";
   } else {
-    sendCommand(F("key "), true);
+    command += " key ";
   }
 
-  sendCommand(passphrase);
+  command += passphrase;  
+  char charBuf[command.length()+1];
+  command.toCharArray(charBuf, command.length()+1);
+  sendCommand(charBuf);
 
-  return join(ssid);
+  command="join " ;
+  command+=ssid;
+    char charBuf2[command.length()+1];
+  command.toCharArray(charBuf2, command.length()+1);
+  return sendCommand(charBuf2,false,"Associated!");
 }
-
 
 #define IP_ADDRESS_BUFFER_SIZE 16 // "255.255.255.255\0"
 
