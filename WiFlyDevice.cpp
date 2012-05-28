@@ -159,10 +159,23 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
 
     if (findInResponse("\r\nWiFly Ver", 1000)) {
       // TODO: Flush or leave remainder of output?
+      // flush!! Why would want the remainder for every time we go into command mode?
+      uart->flush();
+      commandModeFlag=true;
       return true;
     }
   }
   return false;
+}
+
+void WiFlyDevice::exitCommandMode() {
+	uart->print("exit");
+	uart->write(13);
+
+	uart->setTimeout(1000);
+	uart->find("EXIT");
+
+	commandModeFlag = false;
 }
 
 
@@ -359,7 +372,12 @@ const char * WiFlyDevice::getConnectionStatus()
   static char status[4]="";
   char newChar;
   byte offset = 0;
-  enterCommandMode();
+  
+  if (commandModeFlag) {
+		exitCommandMode();
+	}
+
+	enterCommandMode();
   
   if(sendCommand("show c ",false,"8"))
   {
@@ -374,7 +392,9 @@ const char * WiFlyDevice::getConnectionStatus()
     }
     status[3]=0;
   }
-  uart->println("exit");
+  
+  exitCommandMode();
+  
   return status;
 }
 
@@ -556,8 +576,10 @@ boolean WiFlyDevice::join(const char *ssid) {
     // TODO: Change this to still work when server mode not active
     waitForResponse("Listen on ");
     skipRemainderOfResponse();
+    
     return true;
   }
+  exitCommandMode();
   return false;
 }
 

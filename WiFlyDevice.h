@@ -25,6 +25,8 @@ class WiFlyDevice {
     const char * getConnectionStatus();
     const char * ip();
     
+    
+    
   private:
     SpiUartDevice& SPIuart;
     Stream* uart;
@@ -71,6 +73,10 @@ class WiFlyDevice {
     boolean enterCommandMode(boolean isAfterBoot = false);
     boolean softwareReboot(boolean isAfterBoot);
     boolean hardwareReboot();
+    
+    // Methods and variables from WiFly-Shield library from brandenhall
+    bool commandModeFlag;
+    void exitCommandMode() ;
 
     friend class WiFlyClient;
     friend class WiFlyServer;
