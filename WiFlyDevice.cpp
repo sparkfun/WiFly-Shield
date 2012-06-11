@@ -569,54 +569,51 @@ boolean WiFlyDevice::join(const char *ssid) {
   // TODO: Do we want to set the passphrase/key to empty when they're
   //       not required? (Probably not necessary as I think module
   //       ignores them when they're not required.)
-
-  sendCommand(F("join "), true);
+  bool joined = false;
+  String command = "join ";
+  command += ssid;
+  char charBuf[command.length()+1];
+  
+  if (commandModeFlag) 
+  {
+		exitCommandMode();
+	}
+	enterCommandMode();
+ 
+  command.toCharArray(charBuf, command.length()+1);
+  joined=sendCommand(charBuf,false,"Associated!");
   // TODO: Actually detect failure to associate
   // TODO: Handle connecting to Adhoc device
-  if (sendCommand(ssid, false, "Associated!")) {
-    // TODO: Extract information from complete response?
-    // TODO: Change this to still work when server mode not active
-    waitForResponse("Listen on ");
-    skipRemainderOfResponse();
-    
-    return true;
-  }
+
   exitCommandMode();
-  return false;
+  return joined;
 }
 
 
-boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
-                          boolean isWPA) {
-  /*
-   */
-   // For some reason, join is not working after using sendCommand,
-   // so we have to reboot (begin()) the WiFly so far to allow rejoining to the network.
-   // Quick and dirty!!
-   //begin();
-   String command="";
-  if (commandModeFlag) {
+boolean WiFlyDevice::join(const char *ssid, const char *passphrase, boolean isWPA) 
+{
+  String command="";
+  if (commandModeFlag) 
+  {
 		exitCommandMode();
 	}
-
 	enterCommandMode();
   // TODO: Handle escaping spaces/$ in passphrase and SSID
   command="set wlan ";
-
   if (isWPA) {
     command += " passphrase ";
   } else {
     command += " key ";
   }
-
   command += passphrase;  
+  // There must be a better way to convert string -> char[] in arduino... ?
   char charBuf[command.length()+1];
   command.toCharArray(charBuf, command.length()+1);
   sendCommand(charBuf);
 
-  command="join " ;
-  command+=ssid;
-    char charBuf2[command.length()+1];
+  command="join ";
+  command += ssid;
+  char charBuf2[command.length()+1];
   command.toCharArray(charBuf2, command.length()+1);
   return sendCommand(charBuf2,false,"Associated!");
 }
