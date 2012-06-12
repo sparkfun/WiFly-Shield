@@ -1,3 +1,14 @@
+# SparkFun WiFly Shield Library Fork
+
+This library is a fork from http://github.com/bobbrez/WiFly.
+
+## Added features:
+* Changed the way commands are sent to the WiFly, this doesn't make the WiFly stop responding to some commands (i.e. allowing rejoining if the network goes down.).
+* Added a method to check network connection.
+* Added a method to set system sleep and wake timers.
+
+## Tested against firmware revision: 2.32
+
 # SparkFun WiFly Shield Library : alpha 2 release
 
 This is a library for the Arduino-compatible [WiFly Shield](http://sparkfun.com/products/9954) available from SparkFun Electronics. The library also provides a high-level interface for the [SC16IS750 I2C/SPI-to-UART IC](http://www.sparkfun.com/products/9981) used in the WiFly shield but also available on a separate breakout board.

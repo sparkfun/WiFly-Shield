@@ -180,6 +180,40 @@ void WiFlyDevice::exitCommandMode() {
 	commandModeFlag = false;
 }
 
+boolean WiFlyDevice::setWakeSleepTimers( int _wakeTimer, int _sleepTimer)
+{
+  boolean timerSet=false;
+  String cmd1="set sys wake ";
+  String cmd2="set sys sleep ";
+  if(_sleepTimer!=0 && _wakeTimer==0)
+  {
+    // This would make the wifly never wake up!!!!!
+    timerSet=false;
+  }
+  else
+  {
+    if (commandModeFlag) 
+    {
+	  	exitCommandMode();
+	  }
+	  enterCommandMode(); 
+	  cmd1+=_wakeTimer;
+	  char charBuf1[cmd1.length()+1];
+    cmd1.toCharArray(charBuf1, cmd1.length()+1);
+	  boolean wakeOk=sendCommand(charBuf1,false,"AOK");
+	  if(wakeOk)
+	  {
+	    cmd2+= _sleepTimer;
+	    char charBuf2[cmd2.length()+1];
+      cmd2.toCharArray(charBuf2, cmd2.length()+1);
+	    timerSet=sendCommand(charBuf2,false,"AOK");
+	  }
+  }
+  sendCommand("save",false,"AOK");
+  exitCommandMode();
+  return timerSet;
+}
+
 
 
 void WiFlyDevice::skipRemainderOfResponse() {

@@ -17,6 +17,7 @@ class WiFlyDevice {
     boolean join(const char *ssid);
     boolean join(const char *ssid, const char *passphrase, 
                  boolean isWPA = true);
+    boolean setWakeSleepTimers( int _wakeTimer, int _sleepTimer);
                  
 
     boolean configure(byte option, unsigned long value);
