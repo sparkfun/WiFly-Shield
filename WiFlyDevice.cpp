@@ -214,6 +214,17 @@ boolean WiFlyDevice::setWakeSleepTimers( int _wakeTimer, int _sleepTimer)
   return timerSet;
 }
 
+void WiFlyDevice::sleepNow()
+{
+  if (commandModeFlag) 
+  {
+  	exitCommandMode();
+  }
+	enterCommandMode(); 
+  sendCommand("sleep",false,"AOK");
+  exitCommandMode(); // Just in case, as the WiFly will sleep before reaching here.
+}
+
 
 
 void WiFlyDevice::skipRemainderOfResponse() {
