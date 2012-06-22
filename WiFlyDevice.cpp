@@ -1,4 +1,3 @@
-
 #include "WiFly.h"
 
 #define DEBUG_LEVEL 0
@@ -70,28 +69,28 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
 
 
 boolean WiFlyDevice::responseMatched(const char *toMatch) {
-  /*
-   */
-  boolean matchFound = true;
-  unsigned long timeout;
-
-DEBUG_LOG(3, "Entered responseMatched");
-  for (unsigned int offset = 0; offset < strlen(toMatch); offset++) {
-    timeout = millis();
-    while (!uart->available()) {
-      // Wait, with optional time out.
-      if (millis() - timeout > 5000) {
-          return false;
-        }
-      delay(1); // This seems to improve reliability slightly
-    }
-DEBUG_LOG(3,(char)uart->peek());
-    if (uart->read() != toMatch[offset]) {
-      matchFound = false;
-      break;
-    }
+  DEBUG_LOG(3, "Entered responseMatched");
+  
+  boolean ret = true;
+  char c ;
+  do{// purge stream to sync "*OPEN*" cmd
+  	if(uart->available() < strlen(toMatch)){
+  		ret = false ;
+  		break ;
+  	}
+  	c = uart->read() ;
+  }while(c != *toMatch) ;
+  // first char equal
+  if(ret){
+	  do{// check if toMatch+1 match to stream
+  		c = uart->read();
+  		if(c != *(++toMatch)){
+  			ret = false ;
+  			break ;
+  		}
+  	}while(*(toMatch+1) != '\0');
   }
-  return matchFound;
+  return ret;
 }
 
 
