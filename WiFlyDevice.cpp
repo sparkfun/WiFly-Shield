@@ -1,4 +1,3 @@
-
 #include "WiFly.h"
 
 #define DEBUG_LEVEL 0
