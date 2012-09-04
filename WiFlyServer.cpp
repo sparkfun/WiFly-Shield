@@ -39,24 +39,24 @@ WiFlyClient& WiFlyServer::available() {
   if (!activeClient) {
     // TODO: Handle this better
     if (WiFly.uart->available() >= strlen(TOKEN_MATCH_OPEN)) {
-      if (WiFly.responseMatched(TOKEN_MATCH_OPEN)) {
-	// The following values indicate that the connection was
-	// created when acting as a server.
+      if (WiFly.findInResponse(TOKEN_MATCH_OPEN, 1000)) {
+  // The following values indicate that the connection was
+  // created when acting as a server.
 
-	// TODO: Work out why this alternate instantiation code doesn't work:
-	//activeClient = WiFlyClient((uint8_t*) NULL, _port);
+  // TODO: Work out why this alternate instantiation code doesn't work:
+  //activeClient = WiFlyClient((uint8_t*) NULL, _port);
 
-	activeClient._port = _port;
-	activeClient._domain = NULL;
-	activeClient._ip = NULL;
+  activeClient._port = _port;
+  activeClient._domain = NULL;
+  activeClient._ip = NULL;
 
-	activeClient.connect();
-	WiFly.serverConnectionActive = true;
+  activeClient.connect();
+  WiFly.serverConnectionActive = true;
       } else {
-	// Ignore other feedback from the WiFly module.
-	// TODO: Should we check we're not ditching a connect accidentally?
-	//WiFly.skipRemainderOfResponse();
-	WiFly.uart->flush();
+  // Ignore other feedback from the WiFly module.
+  // TODO: Should we check we're not ditching a connect accidentally?
+  //WiFly.skipRemainderOfResponse();
+  WiFly.uart->flush();
       }
     }
   }
