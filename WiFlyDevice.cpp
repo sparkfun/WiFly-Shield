@@ -604,6 +604,20 @@ boolean WiFlyDevice::createAdHocNetwork(const char *ssid)
   //After rebooting, your AdHoc network will be available.
 }
 
+void WiFlyDevice::useUDP()
+{
+  if (commandModeFlag) 
+  {
+		exitCommandMode();
+	}
+	enterCommandMode();
+	
+	sendCommand("set ip protocol 1", false);
+	sendCommand("set ip localport 80", false);
+	
+	exitCommandMode();
+}
+
 boolean WiFlyDevice::join(const char *ssid) {
   /*
    */
