@@ -445,6 +445,86 @@ const char * WiFlyDevice::getConnectionStatus()
   return status;
 }
 
+int WiFlyDevice::available()
+{
+  return uart->available();
+}
+
+char WiFlyDevice::getChar()
+{
+  char ret=' ';
+  if(available()) 
+  ret=uart->read();
+  return ret;
+}
+
+boolean WiFlyDevice::readTimeout(char *chp, uint16_t timeout)
+{
+  uint32_t start = millis();
+  char ch;
+  static int ind=0;
+  while (millis() - start < timeout) {
+	if (uart->available() > 0) {
+    ch = uart->read();
+	  *chp = ch;
+	    /*
+	    if (dbgInd < dbgMax) {
+		dbgBuf[dbgInd++] = ch;
+	    }
+	    */
+	    /*
+	    if (debugOn) {
+		debug.print(ind++);
+		debug.print(F(": "));
+		debug.print(ch,HEX);
+		if (isprint(ch)) {
+		    debug.print(' ');
+		    debug.print(ch);
+		}
+		debug.println();
+	    }*/
+	    return true;
+	}
+    }
+/*
+    if (debugOn) {
+	debug.println(F("readTimeout - timed out"));
+    }
+*/
+    return false;
+}
+
+void WiFlyDevice::flushRx(int timeout)
+{
+  char ch;
+  while (readTimeout(&ch,timeout));
+}
+
+int WiFlyDevice::readBufTimeout(char* buf, int size, uint16_t timeout){
+	int pos=0;
+	//DPRINTLN("reading from serial..");
+	while(readTimeout(buf+pos, timeout)&& pos<size-1){
+		//DPRINT(buf[pos]);
+		pos++;
+		};
+	//make sure the buffer is zero terminated
+	buf[pos]=0;
+	return (pos);
+}
+
+size_t  WiFlyDevice::write(const uint8_t *buffer, size_t size) {
+  /*
+   */
+	while(size--)
+		uart->write(*buffer++);
+	return size;
+}
+
+void WiFlyDevice::flush()
+{
+  uart->flush();
+}
+
 
 void WiFlyDevice::requireFlowControl() {
   /*

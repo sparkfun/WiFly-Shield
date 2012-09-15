@@ -27,6 +27,13 @@ class WiFlyDevice {
     const char * getConnectionStatus();
     const char * ip();
     void useUDP();
+    int available();
+    char getChar();
+    size_t  write(const uint8_t *buffer, size_t size) ;
+    void flush();
+    boolean readTimeout(char *chp, uint16_t timeout);
+    int readBufTimeout(char* buf, int size, uint16_t timeout);
+    void flushRx(int timeout);
     
     
     
