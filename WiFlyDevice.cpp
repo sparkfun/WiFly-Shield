@@ -548,14 +548,17 @@ boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
   sendCommand(F("set wlan "), true);
 
   if (isWPA) {
-    sendCommand(F("passphrase "), true);
+    sendCommand(F("phrase "), true);
   } else {
     sendCommand(F("key "), true);
   }
 
   sendCommand(passphrase);
 
-  return join(ssid);
+  sendCommand(F("set wlan ssid "), true);
+  sendCommand(ssid);
+
+  return join("");
 }
 
 
