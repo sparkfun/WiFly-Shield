@@ -1,29 +1,35 @@
-# SparkFun WiFly Shield Library : alpha 2 release
+WiFly Shield
+============
+
+[![WiFly Shield](https://dlnmh9ip6v2uc.cloudfront.net/images/products/9/9/5/4/09954-01b_i_ma.jpg)  
+*WiFly Shield (WRL-09954)*](https://www.sparkfun.com/products/9954)
 
 This is a library for the Arduino-compatible [WiFly Shield](http://sparkfun.com/products/9954) available from SparkFun Electronics. The library also provides a high-level interface for the [SC16IS750 I2C/SPI-to-UART IC](http://www.sparkfun.com/products/9981) used in the WiFly shield but also available on a separate breakout board.
 
 The goal with this library is to make it--as much as possible--a "drop in" replacement for the official [Arduino Ethernet library](http://www.arduino.cc/en/Reference/Ethernet). Once a wireless network is joined the library should respond in the same way as the Ethernet library. This means you should be able to take existing Ethernet examples and make them work wirelessly without too many changes.
 
-# Installation
+Installation
+------------
+
 A good resource to start is the [Arduino Hacking Libraries](http://www.arduino.cc/en/Hacking/Libraries) article which goes in depth about how to install libraries. There are two ways to install this library, it can either be directly downloaded and unzipped or it can be cloned using Git.
 
-## Step 1: Check the libraries directory
+### Step 1: Check the libraries directory
 For both methods, you'll need to check that you have a shared library
 directory. It should be under the Arduino home (e.g. in OSX, it will probably be `~/Documents/Arduino/libraries`).
 If the `libraries` directory doesn't already exist, you'll need to create it.
 
-## Step 2a: Add the library via Git
+### Step 2a: Add the library via Git
 Use Git to clone this project into the `libraries` directory. If you've
 never used Git before, check out the [Git Community Book](http://book.git-scm.com/).
 
-## Step 2b: Add the library via Archived File
+### Step 2b: Add the library via Archived File
 Download and unzip the zip file from this GitHub project and put the
 contents in the `libraries` directory.
 
 At the end of Step 2, you should have a copy of this project at
 `~/Documents/Arduino/libraries/WiFly`
 
-##Step 3: Include the library in your project
+### Step 3: Include the library in your project
 Restart the Arduino IDE if you're using it. Under the `Sketch` menu, you
 should see a `WiFly` item in the `Import Library ...` option. If you
 don't, recheck that the library is in the right location and that you've
@@ -37,7 +43,8 @@ of your sketch.
 #include <WiFly.h>
 ```
 
-# Usage
+Usage
+-----
 
 This is how you connect to a WPA wireless network with a passphrase
 and use DHCP to obtain an IP address and DNS configuration:
@@ -111,8 +118,8 @@ There are also some troubleshooting tools:
   * SpiUartTerminal: enter command mode and send commands manually
   * HardwareFactoryReset: hardware factory reset a WiFly module
 
-
-# Configuration
+Configuration
+-------------
 
 Different revisions of the WiFly shield support different features. If
 you are using an older revision of the shield you will need to modify
@@ -123,8 +130,8 @@ documentation in the file for further detail.
 The value defaults to the most recent revision sold at the time of
 code release.
 
-
-# Arduino Mega support
+Arduino Mega support
+--------------------
 
 This library supports using the WiFly Shield with the Arduino Mega if
 four jumper wires are added. The following connections are required:
@@ -136,8 +143,8 @@ four jumper wires are added. The following connections are required:
 
 In addition, code on the Mega must not use pins 10, 11, 12, or 13.
 
-
-# Known Issues
+Known Issues
+------------
 
 This is an alpha release--this means it's non-feature complete and may
 not be entirely reliable. It has been tested with the shipped examples and
@@ -176,10 +183,11 @@ There are some known issues:
  * Passphrases or SSIDs that contain spaces or dollar signs ($) will
    probably not work.
 
-# License
+License Informatiom
+-------------------
 
 The SparkFun WiFly Shield library is Copyright (c) 2010 by SparkFun
-Electronics and is licensed under the LGPL.
+Electronics and is licensed under the [LGPL](http://www.gnu.org/copyleft/lesser.html).
 
 Examples based on the original examples from the official Arduino
 Ethernet library are licensed under the same terms as the originals.
@@ -187,14 +195,16 @@ Ethernet library are licensed under the same terms as the originals.
 'ParsedStream.h' contains a ringbuffer implementation based on one
 originally found in the Arduino 'HardwareSerial' implementation.
 
-# Authors
+Authors
+-------
 
  * Chris Taylor (Original autoconnect sketch and tutorial)
  * Philip J. Lindsay (Conversion to library)
  * John Crouchley (1.0 updates -- see https://github.com/jcrouchley/WiFly-Shield)
  * Bob Breznak (see https://github.com/bobbrez/WiFly-Shield for updates)
 
-# Changelog
+Changelog
+---------
 
 + alpha 2 -- 17 December 2010 -- "Azalea Galaxy"
 
