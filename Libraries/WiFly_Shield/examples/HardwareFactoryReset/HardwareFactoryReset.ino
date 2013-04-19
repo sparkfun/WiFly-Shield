@@ -55,7 +55,12 @@ void readResponse(int timeOut = 0 /* millisecond */) {
   int target = millis() + timeOut;
   while((millis() < target) || SpiSerial.available() > 0) {
     if (SpiSerial.available()) {
+
+#if ARDUINO >= 100  
       Serial.write(SpiSerial.read());
+#else
+      Serial.print(SpiSerial.read(), BYTE);
+#endif
     }
   }   
 }
@@ -159,10 +164,19 @@ void loop() {
   // but note that this makes the terminal unresponsive
   // while a response is being received.
   while(SpiSerial.available() > 0) {
+
+#if ARDUINO >= 100
     Serial.write(SpiSerial.read());
+#else
+    Serial.print(SpiSerial.read(), BYTE);
+#endif
   }
   
   if(Serial.available()) { // Outgoing data
+#if ARDUINO >= 100  
     SpiSerial.write(Serial.read());
+#else
+    SpiSerial.print(Serial.read(), BYTE);
+#endif
   }
 }

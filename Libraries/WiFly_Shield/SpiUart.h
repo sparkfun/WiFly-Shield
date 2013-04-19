@@ -55,11 +55,24 @@ class SpiUartDevice : public Stream {
     void begin(unsigned long baudrate = BAUD_RATE_DEFAULT);
     int available();
     int read();
+#if ARDUINO >= 100
     size_t write(byte value);
-    size_t write(const char *str, size_t size);
+    size_t write(const char *str);
+#if ENABLE_BULK_TRANSFERS
+    size_t write(const uint8_t *buffer, size_t size);
+#else
     using Print::write;
-
-    void flush();
+#endif
+#else
+    void write(byte value);
+    void write(const char *str);
+#if ENABLE_BULK_TRANSFERS
+    void write(const uint8_t *buffer, size_t size);
+#else
+    using Print::write;
+#endif
+#endif
+	void flush();
 
 //required for Stream
     int peek() {return 0;};
