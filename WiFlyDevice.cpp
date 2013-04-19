@@ -646,8 +646,8 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
     case ANTENNA_TYPE:
       enterCommandMode();
     
-      uart.print("set wlan ext_antenna ");
-      uart.println(value);
+      uart->print("set wlan ext_antenna ");
+      uart->println(value);
 
       reboot();
     
