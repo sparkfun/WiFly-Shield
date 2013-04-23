@@ -263,7 +263,7 @@ void SpiUartDevice::write(const uint8_t *buffer, size_t size) {
   return (0);
 #endif
 }
-
+#endif
 void SpiUartDevice::flush() {
   /*
    * Flush characters from SC16IS750 receive buffer.
