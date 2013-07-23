@@ -13,8 +13,15 @@ directory. It should be under the Arduino home (e.g. in OSX, it will probably be
 If the `libraries` directory doesn't already exist, you'll need to create it.
 
 ### Step 2a: Add the library via Git
-Use Git to clone this project into the `libraries` directory. If you've
-never used Git before, check out the [Git Community Book](http://book.git-scm.com/).
+Clone this project to your favorite project folder.
+
+    git clone git@github.com:sparkfun/WiFly-Shield.git
+
+If you've never used Git before, check out the [Git Community Book](http://book.git-scm.com/).
+
+Now create a symbolic link From your Libraries folder to the newly created WiFly_Shield directory of the freshly cloned project.
+
+    ln -s ~/path/to/project/Libraries/WiFly_Shield ~/Document/Arduino/libraries/Wifly_Shield (Mac)
 
 ### Step 2b: Add the library via Archived File
 Download and unzip the zip file from this GitHub project and put the
