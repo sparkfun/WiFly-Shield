@@ -178,7 +178,7 @@ int SpiUartDevice::available() {
   // This alternative just checks if there's data but doesn't
   // return how many characters are in the buffer:
   // readRegister(LSR) & 0x01
-  delay(2);
+  //delay(2);
   return (readRegister(RXLVL));
 }
 
