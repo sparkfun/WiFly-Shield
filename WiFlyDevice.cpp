@@ -414,6 +414,10 @@ boolean WiFlyDevice::sendCommand(const char *command,
   return true;
 }
 
+/**
+* @brief Checks the connection status
+* @returns Conn status as four chars, in this hex format: 8XYZ
+*/
 const char * WiFlyDevice::getConnectionStatus()
 {
   static char status[4]="";

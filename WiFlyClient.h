@@ -23,6 +23,7 @@ class WiFlyClient : public Stream {
 
   int available();
   int read();
+  char readChar();
   void flush(void);
   int peek();
 

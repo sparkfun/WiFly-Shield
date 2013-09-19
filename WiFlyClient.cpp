@@ -128,6 +128,14 @@ int WiFlyClient::read() {
   return stream.read();
 }
 
+char WiFlyClient::readChar() {
+  if (!isOpen) {
+    return -1;
+  }
+  char c=stream.read();
+  return c;
+}
+
 int WiFlyClient::peek() {
   if (!isOpen) {
     return -1;
