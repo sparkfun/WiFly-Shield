@@ -1,4 +1,3 @@
-
 #include "WiFly.h"
 
 #define DEBUG_LEVEL 0
@@ -843,6 +842,14 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
         return false;
       }
       break;
+    case ANTENNA_TYPE:
+      enterCommandMode();
+    
+      uart->print("set wlan extant ");
+      uart->println(value);
+
+      reboot();
+    
     default:
       return false;
       break;

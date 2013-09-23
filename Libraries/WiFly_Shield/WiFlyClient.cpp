@@ -37,27 +37,48 @@ WiFlyClient::WiFlyClient(const char* domain, uint16_t port) :
 }
 
 
-size_t  WiFlyClient::write(byte value) {
+#if ARDUINO >= 100
+size_t WiFlyClient::write(byte value) {
+#else
+void WiFlyClient::write(byte value) {
+#endif
   /*
    */
   _WiFly.uart->write(value);
-  return 1;
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
-
-size_t  WiFlyClient::write(const uint8_t *buffer, size_t size) {
+#if ARDUINO >= 100
+size_t WiFlyClient::write(const char *str) {
+#else
+void WiFlyClient::write(const char *str) {
+#endif
   /*
    */
-	while(size--)
-		_WiFly.uart->write(*buffer++);
-	return size;
+  _WiFly.uart->write(str);
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
+#if ARDUINO >= 100
+size_t WiFlyClient::write(const uint8_t *buffer, size_t size) {
+#else
+void WiFlyClient::write(const uint8_t *buffer, size_t size) {
+#endif
+  /*
+   */
+  _WiFly.uart->write(buffer, size);
+#if ARDUINO >= 100
+  return (0);
+#endif
+}
 
 boolean WiFlyClient::connect() {
   /*
    */
-
   stream.begin(_WiFly.uart);
 
   // Handle case when Null object returned from Server.available()

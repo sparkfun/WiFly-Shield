@@ -177,8 +177,9 @@ int SpiUartDevice::available() {
 
   // This alternative just checks if there's data but doesn't
   // return how many characters are in the buffer:
-  //    readRegister(LSR) & 0x01
-  return readRegister(RXLVL);
+  // readRegister(LSR) & 0x01
+  //delay(2);
+  return (readRegister(RXLVL));
 }
 
 
@@ -199,7 +200,11 @@ int SpiUartDevice::read() {
 }
 
 
+#if ARDUINO >= 100
 size_t SpiUartDevice::write(byte value) {
+#else
+void SpiUartDevice::write(byte value) {
+#endif
   /*
    * Write byte to UART.
    */
@@ -207,23 +212,58 @@ size_t SpiUartDevice::write(byte value) {
   while (readRegister(TXLVL) == 0) {
     // Wait for space in TX buffer
   };
-  writeRegister(THR, value); 
+  writeRegister(THR, value);
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
 
-size_t SpiUartDevice::write(const char *str, size_t size) {
+#if ARDUINO >= 100
+size_t SpiUartDevice::write(const char *str) {
+#else
+void SpiUartDevice::write(const char *str) {
+#endif
   /*
    * Write string to UART.
    */
-
-  while (size--)
-    write(*str++);
-    while (readRegister(TXLVL) < 64) {
-      // Wait for empty TX buffer (slow)
-      // (But apparently still not slow enough to ensure delivery.)
-    };
+  write((const uint8_t *) str, strlen(str));  
+  while (readRegister(TXLVL) < 64) {
+    // Wait for empty TX buffer (slow)
+    // (But apparently still not slow enough to ensure delivery.)
+  };
+#if ARDUINO >= 100
+  return (0);
+#endif
 }
 
+#if ENABLE_BULK_TRANSFERS
+#if ARDUINO >= 100
+size_t SpiUartDevice::write(const uint8_t *buffer, size_t size) {
+#else
+void SpiUartDevice::write(const uint8_t *buffer, size_t size) {
+#endif
+  /*
+  
+    Write buffer to UART.
+ 
+   */
+  select();
+  transfer(THR); // TODO: Change this when we modify register addresses? (Even though it's 0x00.) 
+
+  while(size > 16) {
+    transfer_bulk(buffer, 16);
+    size -= 16;
+    buffer += 16;
+  }
+  transfer_bulk(buffer, size);
+
+  deselect();
+#if ARDUINO >= 100
+  return (0);
+#endif
+}
+#endif
 void SpiUartDevice::flush() {
   /*
    * Flush characters from SC16IS750 receive buffer.
