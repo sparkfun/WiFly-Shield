@@ -1,5 +1,4 @@
-WiFly Shield
-============
+# SparkFun WiFly Shield Library : alpha 2 release
 
 [![WiFly Shield](https://dlnmh9ip6v2uc.cloudfront.net/images/products/9/9/5/4/09954-01b_i_ma.jpg)  
 *WiFly Shield (WRL-09954)*](https://www.sparkfun.com/products/9954)
