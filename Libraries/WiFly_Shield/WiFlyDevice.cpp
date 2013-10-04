@@ -4,6 +4,8 @@
 
 #include "Debug.h"
 
+#include <string.h>
+
 
 boolean WiFlyDevice::findInResponse(const char *toMatch,
                                     unsigned int timeOut = 1000) {
@@ -69,28 +71,28 @@ boolean WiFlyDevice::findInResponse(const char *toMatch,
 
 
 boolean WiFlyDevice::responseMatched(const char *toMatch) {
-  DEBUG_LOG(3, "Entered responseMatched");
-  
-  boolean ret = true;
-  char c ;
-  do{// purge stream to sync "*OPEN*" cmd
-  	if(uart->available() < strlen(toMatch)){
-  		ret = false ;
-  		break ;
-  	}
-  	c = uart->read() ;
-  }while(c != *toMatch) ;
-  // first char equal
-  if(ret){
-	  do{// check if toMatch+1 match to stream
-  		c = uart->read();
-  		if(c != *(++toMatch)){
-  			ret = false ;
-  			break ;
-  		}
-  	}while(*(toMatch+1) != '\0');
+  /*
+   */
+  boolean matchFound = true;
+  unsigned long timeout;
+
+DEBUG_LOG(3, "Entered responseMatched");
+  for (unsigned int offset = 0; offset < strlen(toMatch); offset++) {
+    timeout = millis();
+    while (!uart->available()) {
+      // Wait, with optional time out.
+      if (millis() - timeout > 5000) {
+          return false;
+        }
+      delay(1); // This seems to improve reliability slightly
+    }
+DEBUG_LOG(3,(char)uart->peek());
+    if (uart->read() != toMatch[offset]) {
+      matchFound = false;
+      break;
+    }
   }
-  return ret;
+  return matchFound;
 }
 
 
@@ -158,10 +160,68 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
 
     if (findInResponse("\r\nWiFly Ver", 1000)) {
       // TODO: Flush or leave remainder of output?
+      // flush!! Why would want the remainder for every time we go into command mode?
+      uart->flush();
+      commandModeFlag=true;
       return true;
     }
   }
   return false;
+}
+
+void WiFlyDevice::exitCommandMode() {
+	uart->print("exit");
+	uart->write(13);
+
+	uart->setTimeout(1000);
+	uart->find("EXIT");
+
+	commandModeFlag = false;
+}
+
+boolean WiFlyDevice::setWakeSleepTimers( int _wakeTimer, int _sleepTimer)
+{
+  boolean timerSet=false;
+  String cmd1="set sys wake ";
+  String cmd2="set sys sleep ";
+  if(_sleepTimer!=0 && _wakeTimer==0)
+  {
+    // This would make the wifly never wake up!!!!!
+    timerSet=false;
+  }
+  else
+  {
+    if (commandModeFlag) 
+    {
+	  	exitCommandMode();
+	  }
+	  enterCommandMode(); 
+	  cmd1+=_wakeTimer;
+	  char charBuf1[cmd1.length()+1];
+    cmd1.toCharArray(charBuf1, cmd1.length()+1);
+	  boolean wakeOk=sendCommand(charBuf1,false,"AOK");
+	  if(wakeOk)
+	  {
+	    cmd2+= _sleepTimer;
+	    char charBuf2[cmd2.length()+1];
+      cmd2.toCharArray(charBuf2, cmd2.length()+1);
+	    timerSet=sendCommand(charBuf2,false,"AOK");
+	  }
+  }
+  sendCommand("save",false,"AOK");
+  exitCommandMode();
+  return timerSet;
+}
+
+void WiFlyDevice::sleepNow()
+{
+  if (commandModeFlag) 
+  {
+  	exitCommandMode();
+  }
+	enterCommandMode(); 
+  sendCommand("sleep",false,"AOK");
+  exitCommandMode(); // Just in case, as the WiFly will sleep before reaching here.
 }
 
 
@@ -353,6 +413,121 @@ boolean WiFlyDevice::sendCommand(const char *command,
   return true;
 }
 
+/**
+* @brief Checks the connection status
+* @returns Conn status as four chars, in this hex format: 8XYZ
+*/
+const char * WiFlyDevice::getConnectionStatus()
+{
+  static char status[4]="";
+  char newChar;
+  byte offset = 0;
+  
+  if (commandModeFlag) {
+		exitCommandMode();
+	}
+
+	enterCommandMode();
+  
+  if(sendCommand("show c ",false,"8"))
+  {
+    while (offset < 4)
+    {
+      newChar = uart->read();
+      if (newChar != -1) 
+      {
+        status[offset] = newChar;
+        offset++;
+      }
+    }
+    status[3]=0;
+  }
+  
+  exitCommandMode();
+  
+  return status;
+}
+
+int WiFlyDevice::available()
+{
+  return uart->available();
+}
+
+char WiFlyDevice::getChar()
+{
+  char ret=' ';
+  if(available()) 
+  ret=uart->read();
+  return ret;
+}
+
+boolean WiFlyDevice::readTimeout(char *chp, uint16_t timeout)
+{
+  uint32_t start = millis();
+  char ch;
+  static int ind=0;
+  while (millis() - start < timeout) {
+	if (uart->available() > 0) {
+    ch = uart->read();
+	  *chp = ch;
+	    /*
+	    if (dbgInd < dbgMax) {
+		dbgBuf[dbgInd++] = ch;
+	    }
+	    */
+	    /*
+	    if (debugOn) {
+		debug.print(ind++);
+		debug.print(F(": "));
+		debug.print(ch,HEX);
+		if (isprint(ch)) {
+		    debug.print(' ');
+		    debug.print(ch);
+		}
+		debug.println();
+	    }*/
+	    return true;
+	}
+    }
+/*
+    if (debugOn) {
+	debug.println(F("readTimeout - timed out"));
+    }
+*/
+    return false;
+}
+
+void WiFlyDevice::flushRx(int timeout)
+{
+  char ch;
+  while (readTimeout(&ch,timeout));
+}
+
+int WiFlyDevice::readBufTimeout(char* buf, int size, uint16_t timeout){
+	int pos=0;
+	//DPRINTLN("reading from serial..");
+	while(readTimeout(buf+pos, timeout)&& pos<size-1){
+		//DPRINT(buf[pos]);
+		pos++;
+		};
+	//make sure the buffer is zero terminated
+	buf[pos]=0;
+	return (pos);
+}
+
+size_t  WiFlyDevice::write(const uint8_t *buffer, size_t size) {
+  /*
+   */
+	while(size--)
+		uart->write(*buffer++);
+	return size;
+}
+
+void WiFlyDevice::flush()
+{
+  uart->flush();
+}
+
 
 void WiFlyDevice::requireFlowControl() {
   /*
@@ -512,6 +687,20 @@ boolean WiFlyDevice::createAdHocNetwork(const char *ssid)
   //After rebooting, your AdHoc network will be available.
 }
 
+void WiFlyDevice::useUDP()
+{
+  if (commandModeFlag) 
+  {
+		exitCommandMode();
+	}
+	enterCommandMode();
+	
+	sendCommand("set ip protocol 1", false);
+	sendCommand("set ip localport 80", false);
+	
+	exitCommandMode();
+}
+
 boolean WiFlyDevice::join(const char *ssid) {
   /*
    */
@@ -522,44 +711,54 @@ boolean WiFlyDevice::join(const char *ssid) {
   // TODO: Do we want to set the passphrase/key to empty when they're
   //       not required? (Probably not necessary as I think module
   //       ignores them when they're not required.)
-
-  sendCommand(F("join "), true);
+  bool joined = false;
+  String command = "join ";
+  command += ssid;
+  char charBuf[command.length()+1];
+  
+  if (commandModeFlag) 
+  {
+		exitCommandMode();
+	}
+	enterCommandMode();
+ 
+  command.toCharArray(charBuf, command.length()+1);
+  joined=sendCommand(charBuf,false,"Associated!");
   // TODO: Actually detect failure to associate
   // TODO: Handle connecting to Adhoc device
-  if (sendCommand(ssid, false, "Associated!")) {
-    // TODO: Extract information from complete response?
-    // TODO: Change this to still work when server mode not active
-    waitForResponse("Listen on ");
-    skipRemainderOfResponse();
-    return true;
-  }
-  return false;
+
+  exitCommandMode();
+  return joined;
 }
 
 
-boolean WiFlyDevice::join(const char *ssid, const char *passphrase,
-                          boolean isWPA) {
-  /*
-   */
+boolean WiFlyDevice::join(const char *ssid, const char *passphrase, boolean isWPA) 
+{
+  String command="";
+  if (commandModeFlag) 
+  {
+		exitCommandMode();
+	}
+	enterCommandMode();
   // TODO: Handle escaping spaces/$ in passphrase and SSID
-
-  // TODO: Do this better...
-  sendCommand(F("set wlan "), true);
-
+  command="set wlan ";
   if (isWPA) {
-    sendCommand(F("phrase "), true);
+    command += " passphrase ";
   } else {
-    sendCommand(F("key "), true);
+    command += " key ";
   }
+  command += passphrase;  
+  // There must be a better way to convert string -> char[] in arduino... ?
+  char charBuf[command.length()+1];
+  command.toCharArray(charBuf, command.length()+1);
+  sendCommand(charBuf);
 
-  sendCommand(passphrase);
-
-  sendCommand(F("set wlan ssid "), true);
-  sendCommand(ssid);
-
-  return join("");
+  command="join ";
+  command += ssid;
+  char charBuf2[command.length()+1];
+  command.toCharArray(charBuf2, command.length()+1);
+  return sendCommand(charBuf2,false,"Associated!");
 }
-
 
 #define IP_ADDRESS_BUFFER_SIZE 16 // "255.255.255.255\0"
 

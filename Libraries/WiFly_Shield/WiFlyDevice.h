@@ -12,17 +12,30 @@ class WiFlyDevice {
     void setUart(Stream* newUart);
     void begin();
     void begin(boolean adhocMode);
-	boolean createAdHocNetwork(const char *ssid);
+	  boolean createAdHocNetwork(const char *ssid);
 
     boolean join(const char *ssid);
     boolean join(const char *ssid, const char *passphrase, 
                  boolean isWPA = true);
+    boolean setWakeSleepTimers( int _wakeTimer, int _sleepTimer);
+    void sleepNow();
+                 
 
     boolean configure(byte option, unsigned long value);
 
-	long getTime();
-
+	  long getTime();
+    const char * getConnectionStatus();
     const char * ip();
+    void useUDP();
+    int available();
+    char getChar();
+    size_t  write(const uint8_t *buffer, size_t size) ;
+    void flush();
+    boolean readTimeout(char *chp, uint16_t timeout);
+    int readBufTimeout(char* buf, int size, uint16_t timeout);
+    void flushRx(int timeout);
+    
+    
     
   private:
     SpiUartDevice& SPIuart;
@@ -70,6 +83,10 @@ class WiFlyDevice {
     boolean enterCommandMode(boolean isAfterBoot = false);
     boolean softwareReboot(boolean isAfterBoot);
     boolean hardwareReboot();
+    
+    // Methods and variables from WiFly-Shield library from brandenhall
+    bool commandModeFlag;
+    void exitCommandMode() ;
 
     friend class WiFlyClient;
     friend class WiFlyServer;
