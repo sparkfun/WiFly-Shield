@@ -158,7 +158,7 @@ boolean WiFlyDevice::enterCommandMode(boolean isAfterBoot) {
     // TODO: Find alternate approach or only use this method after a (re)boot?
     uart->println(F("ver"));
 
-    if (findInResponse("\r\nWiFly Ver", 1000)) {
+    if (findInResponse("\r\nwifly-GSX Ver", 1000)) {
       // TODO: Flush or leave remainder of output?
       // flush!! Why would want the remainder for every time we go into command mode?
       uart->flush();
