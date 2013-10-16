@@ -174,7 +174,7 @@ void WiFlyDevice::exitCommandMode() {
 	uart->write(13);
 
 	uart->setTimeout(1000);
-	uart->find("EXIT");
+	uart->find("EXIT\n");
 
 	commandModeFlag = false;
 }
@@ -812,7 +812,8 @@ const char * WiFlyDevice::ip() {
   // in a state where it misses the first/next connection so for
   // now we don't check the response.
   // TODO: Fix this
-  uart->println("exit");
+  exitCommandMode();
+  //uart->println("exit");
   //sendCommand("exit", false, "EXIT");
 
   return ip;
