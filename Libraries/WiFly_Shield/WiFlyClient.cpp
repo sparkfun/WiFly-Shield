@@ -94,7 +94,6 @@ boolean WiFlyClient::connect() {
     // This is a connection started by the Server class
     // so the connection is already established.
    isOpen = true;
-
   } else {
     // TODO: Track state more?
     _WiFly.enterCommandMode();
