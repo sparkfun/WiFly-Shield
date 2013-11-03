@@ -48,7 +48,7 @@
  */
 
 #define SHIELD_REVISION 3 // Change this value to match your shield revision
-
+#define FIRMWARE_VER 4    // Change this value to match your WiFly firmware version
 
 /* -- Do not change anything below this line -- */
 
@@ -74,5 +74,11 @@
 
 #endif // Revision 2 
 #endif // Revision 1
+
+#if FIRMWARE_VER >= 4
+  #define VER_RESPONSE "wifly-GSX"
+#else
+  #define VER_RESPONSE "WiFly"
+#endif
 
 #endif
