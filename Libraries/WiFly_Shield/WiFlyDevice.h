@@ -26,6 +26,7 @@ class WiFlyDevice {
 	  long getTime();
     const char * getConnectionStatus();
     const char * ip();
+    const char * getVersion();
     void useUDP();
     int available();
     char getChar();
