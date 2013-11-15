@@ -819,6 +819,40 @@ const char * WiFlyDevice::ip() {
   return ip;
 }
 
+/**
+* @brief Get the version of the WiFly firmware
+* @return Char with the version info
+*/
+const char* WiFlyDevice::getVersion()
+{
+  const int versionLength=64;
+  // Allocate one extra space for the zero terminator.
+  static char version[versionLength+1] = { 0 };
+
+  enterCommandMode();
+  sendCommand("ver", false, VER_RESPONSE);
+
+  int offset = 0;
+  int readVal = 0;
+  while (offset < versionLength && readVal!='\n') {
+    readVal = uart->read();
+    if (readVal == -1) {
+      // Data not available; try again after brief delay.
+      delay(1);
+      continue;
+    }
+    else {
+      version[offset++] = readVal;
+    }
+  }
+
+  waitForResponse("<"); // This char appears in the beginning of the prompt
+  findInResponse(" ");  // And with this we ignore the rest of the prompt
+  exitCommandMode();
+
+  return version;
+}
+
 boolean WiFlyDevice::configure(byte option, unsigned long value) {
   /*
    */
