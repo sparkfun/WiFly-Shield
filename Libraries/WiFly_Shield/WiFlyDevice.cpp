@@ -284,10 +284,19 @@ void WiFlyDevice::begin(boolean adhocMode) {
   if (!bDifferentUart) SPIuart.begin();
   reboot(); // Reboot to get device into known state
   //requireFlowControl();
-  setConfiguration(adhocMode);
+  setConfiguration(adhocMode, NULL);
 }
 
-// TODO: Create a `begin()` that allows IP etc to be supplied.
+void WiFlyDevice::beginIP(const char *ip) {
+  /*
+   */
+  DEBUG_LOG(1, "Entered WiFlyDevice::beginIP()");
+
+  if (!bDifferentUart) SPIuart.begin();
+  reboot(); // Reboot to get device into known state
+  //requireFlowControl();
+  setConfiguration(false, ip);
+}
 
 
 
@@ -581,7 +590,7 @@ void WiFlyDevice::requireFlowControl() {
   reboot();
 }
 
-void WiFlyDevice::setConfiguration(boolean adhocMode) {
+void WiFlyDevice::setConfiguration(boolean adhocMode, const char *ip) {
   /*
    */
   enterCommandMode();
@@ -613,8 +622,14 @@ void WiFlyDevice::setConfiguration(boolean adhocMode) {
   if(!adhocMode)
   {
 	sendCommand(F("set wlan auth 4"));
-	
-	sendCommand(F("set ip dhcp 1"));
+
+        if (ip == NULL) {
+		sendCommand(F("set ip dhcp 1"));
+	} else {
+		sendCommand(F("set ip address "), true);
+		sendCommand(ip);
+		sendCommand(F("set ip dhcp 0"));
+	}
   } 
   else
   {

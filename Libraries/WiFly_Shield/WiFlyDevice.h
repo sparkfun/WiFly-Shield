@@ -12,6 +12,12 @@ class WiFlyDevice {
     void setUart(Stream* newUart);
     void begin();
     void begin(boolean adhocMode);
+
+    // begin using a static ip (without dhcp)
+    // you should provide the ip as a zero terminated string in the
+    // usual ip format ("192.168.100.42")
+    void beginIP(const char *ip);
+
 	  boolean createAdHocNetwork(const char *ssid);
 
     boolean join(const char *ssid);
@@ -68,7 +74,7 @@ class WiFlyDevice {
     void switchToCommandMode();
     void reboot();
     void requireFlowControl();
-    void setConfiguration(boolean adhocMode);
+    void setConfiguration(boolean adhocMode, const char *ip);
 	void setAdhocParams();
     boolean sendCommand(const char *command,
                         boolean isMultipartCommand, // Has default value
