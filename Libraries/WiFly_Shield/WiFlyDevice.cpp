@@ -878,9 +878,13 @@ boolean WiFlyDevice::configure(byte option, unsigned long value) {
     case WIFLY_BAUD:
       // TODO: Use more of standard command sending method?
       enterCommandMode();
-      uart->print("set uart instant ");
-      uart->println(value);
-      delay(10); // If we don't have this here when we specify the
+      uart->print("set uart instant "); uart->println(value);
+
+      if (value > 9600) {
+        uart->println("set uart flow 1");
+      }
+
+      delay(1000); // If we don't have this here when we specify the
                  // baud as a number rather than a string it seems to
                  // fail. TODO: Find out why.
       SPIuart.begin(value);
