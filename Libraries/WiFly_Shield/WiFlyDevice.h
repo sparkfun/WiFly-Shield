@@ -25,6 +25,7 @@ class WiFlyDevice {
                  boolean isWPA = true);
     boolean setWakeSleepTimers( int _wakeTimer, int _sleepTimer);
     void sleepNow();
+    void wakeUp();
                  
 
     boolean configure(byte option, unsigned long value);
