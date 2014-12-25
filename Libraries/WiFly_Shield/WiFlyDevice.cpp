@@ -224,6 +224,19 @@ void WiFlyDevice::sleepNow()
   exitCommandMode(); // Just in case, as the WiFly will sleep before reaching here.
 }
 
+void WiFlyDevice::wakeUp()
+{
+  if (!bDifferentUart)
+  {
+    //To wake up, set GPIO2 on the uart chip, which is connected to the
+    // FORCE WAKE pin on the WiFly
+    SPIuart.ioSetDirection(0b00000100);
+    SPIuart.ioSetState(0b00000000);
+    delay(1);
+    SPIuart.ioSetState(0b00000100);
+  }
+}
+
 
 
 void WiFlyDevice::skipRemainderOfResponse() {
