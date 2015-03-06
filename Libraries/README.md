@@ -21,7 +21,7 @@ If you've never used Git before, check out the [Git Community Book](http://book.
 
 Now create a symbolic link From your Libraries folder to the newly created WiFly_Shield directory of the freshly cloned project.
 
-    ln -s ~/path/to/project/Libraries/WiFly_Shield ~/Document/Arduino/libraries/Wifly_Shield (Mac)
+    ln -s ~/path/to/project/Libraries/WiFly_Shield ~/Documents/Arduino/libraries/Wifly_Shield (Mac)
 
 ### Step 2b: Add the library via Archived File
 Download and unzip the zip file from this GitHub project and put the
