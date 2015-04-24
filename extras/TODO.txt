@@ -1,0 +1,18 @@
+
+* Add mention of port 80 default issue.
+
+* Add mention of configuration change/save for flow control
+
+* Add baud rate control.
+
+* Consider future support for firmware 2.20 which has better debug level control--including suppressing DHCP messages?
+
+* Improve documentation.
+
+* Special case version 2.19 firmware with passphrase length bug?
+
+* Reimplement release script. Including handling credentials issue.
+
+* Support WEP out of the box.
+
+* Handle connecting to adhoc networks.
