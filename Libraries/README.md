@@ -12,6 +12,12 @@ The goal with this library is to make it--as much as possible--a "drop in" repla
 
 The library also provides a high-level interface for the [SC16IS750 I2C/SPI-to-UART IC](http://www.sparkfun.com/products/9981) used in the WiFly shield but also available on a separate [breakout board](https://www.sparkfun.com/products/9981).
 
+Update Library Instructions:
+----------------------------
+To get the most up-to-date version of the library, you must run the following git subtree commands. 
+
+$git subtree pull -P Libraries/Arduino --squash https://github.com/sparkfun/SparkFun_WiFly_Shield_Arduino_Library master
+
 Installation
 ------------
 

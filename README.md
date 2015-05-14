@@ -1,9 +1,11 @@
-# SparkFun WiFly Shield Library
+SparkFun WiFly Shield 
+===================================
 
-[![WiFly Shield](https://dlnmh9ip6v2uc.cloudfront.net/images/products/9/9/5/4/09954-01b_i_ma.jpg)  
-*WiFly Shield (WRL-09954)*](https://www.sparkfun.com/products/9954)
+![SparkFun WiFly Shield](https://dlnmh9ip6v2uc.cloudfront.net/images/products/9/9/5/4/09954-01b_i_ma.jpg)  
 
-The[WiFly Shield](http://sparkfun.com/products/9954) enables ARduino boards to connect to 802.11b/g wireless networks with Roving Networks RN-131C module. It uses the SC16IS750 SPI-to-UART chip to free up the Arduino's UART.
+[*SparkFun WiFly Shield (WRL-09954)*](https://www.sparkfun.com/products/9954)
+
+The[SparkFun WiFly Shield](http://sparkfun.com/products/9954) enables ARduino boards to connect to 802.11b/g wireless networks with Roving Networks RN-131C module. It uses the SC16IS750 SPI-to-UART chip to free up the Arduino's UART.
 
 Repository Contents
 -------------------
@@ -12,6 +14,14 @@ Repository Contents
 * **/Hardware** - All Eagle design files (.brd, .sch)
 * **/Libraries** - All Arduino libraries and board examples
 * **/Production** - Test bed files and production panel files
+
+Documentation
+--------------
+* **[Library](https://github.com/sparkfun/SparkFun_WiFly_Shield_Arduino_Library)** - Arduino library for the WiFly Shield.
+* **[Hookup Guide](https://learn.sparkfun.com/tutorials/wifly-shield-hookup-guide)** - Basic hookup guide for the WiFly Shield.
+* **[SparkFun Fritzing repo](https://github.com/sparkfun/Fritzing_Parts)** - Fritzing diagrams for SparkFun products.
+* **[SparkFun 3D Model repo](https://github.com/sparkfun/3D_Models)** - 3D models of SparkFun products. 
+
 
 Product Versions
 ----------------
