@@ -1,3 +1,5 @@
+***NOTE:*** *This product has been retired from our catalog. If you are looking for more up-to-date info, please check out the [forum](https://forum.sparkfun.com/), [comments here on GitHub](https://github.com/sparkfun/WiFly-Shield/issues), or [IRC channel](https://www.sparkfun.com/news/263) to see how other users are still hacking and improving on this product.*
+
 SparkFun WiFly Shield 
 ===================================
 
