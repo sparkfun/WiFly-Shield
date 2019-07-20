@@ -28,7 +28,7 @@ Documentation
 Product Versions
 ----------------
 * [WRL-09954](https://www.sparkfun.com/products/9954)- The basic WiFly shield 
-* [RTL-11389] (https://www.sparkfun.com/products/11389)- Retail packaging of WiFly shield and stackable headers
+* [RTL-11389](https://www.sparkfun.com/products/11389)- Retail packaging of WiFly shield and stackable headers
 
 License Information
 -------------------
