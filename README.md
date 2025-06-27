@@ -3,7 +3,7 @@
 SparkFun WiFly Shield 
 ===================================
 
-![SparkFun WiFly Shield](https://dlnmh9ip6v2uc.cloudfront.net/images/products/9/9/5/4/09954-01b_i_ma.jpg)  
+![SparkFun WiFly Shield](https://cdn.sparkfun.com/assets/parts/4/0/8/0/09954-01b.jpg)  
 
 [*SparkFun WiFly Shield (WRL-09954)*](https://www.sparkfun.com/products/9954)
 
